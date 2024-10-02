@@ -22,8 +22,7 @@ Kebermanfaatannya:
 - memberi rating (low priority)
 - memberi testimoni/ulasan (low priority)
 - Membuat Produk
-- Edit Produk
-- Delete Produk
+- Edit/Delete Produk
 
 
 ## iv. Initial Dataset
