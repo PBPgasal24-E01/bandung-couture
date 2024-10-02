@@ -23,6 +23,7 @@ iii.
 - Membuat Produk
 - Edit Produk
 - Delete Produk
+- modul lainnya
 
 iv. https://docs.google.com/spreadsheets/d/11mQOJqHywUHE1BKJ_xEZDighsk_zzr7Ihb33854lfyE/edit?gid=146689139#gid=146689139
 
