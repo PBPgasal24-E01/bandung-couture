@@ -15,15 +15,20 @@ Kebermanfaatannya:
 3. Rekomendasi untuk para pengunjung Bandung
 
 iii. 
-Login/Register
-Model 
-
+- Login/Register
+- admin-django (low priority) 
+- Filter produk/merk
+- memberi rating (low priority)
+- memberi testimoni/ulasan (low priority)
+- Membuat Produk
+- Edit Produk
+- Delete Produk
 
 iv. https://docs.google.com/spreadsheets/d/11mQOJqHywUHE1BKJ_xEZDighsk_zzr7Ihb33854lfyE/edit?gid=146689139#gid=146689139
 
 v. User, Contributor, Admin
 - User:
-    - Melihat produk/filter produk
+    - Melihat produk/filter produk, memberi rating dan testimoni/ulasan. 
 - Contributor:
     - Menulis produk baru/edit produk/delete produk
 - Admin: (low priority)
