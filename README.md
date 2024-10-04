@@ -36,3 +36,6 @@ Dataset yang sudah kami peroleh kami kumpulkan ke dalam link https://docs.google
     - Menulis produk baru/edit produk/delete produk
 - Admin: (low priority)
     - Accept/Reject update dari Contributor
+
+## Link Deployment
+http://raihan-akbar-bandungcouture.pbp.cs.ui.ac.id/
