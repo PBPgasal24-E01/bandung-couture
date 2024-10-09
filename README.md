@@ -16,16 +16,16 @@ Kebermanfaatannya:
 3. Rekomendasi untuk para pengunjung Bandung
 
 ## iii. Isi dari Modul Aplikasi
-- Modul Buat Produk: (Regina)
+- Modul Buat Produk: (Dava)
     - CRUD Produk 
 - Modul Buat Testimoni + rating: (Raihan)
     - CRUD Testimoni
 - Modul Buat Forum: (Yose)
     - CRUD Forum 
-- Modul Buat Profil: (Dava)
-    - CRUD Buat Profil
 - Modul Wishlist: (Jonathan)
     - CRUD Wishlist
+- Modul Promo: (Regina)
+    - CRUD Promo
 
 
 ## iv. Initial Dataset
@@ -36,14 +36,15 @@ Dataset yang sudah kami peroleh kami kumpulkan ke dalam link https://docs.google
 - User:
     - Melihat produk
     - Filter produk
+    - CRUD Testimoni
+    - CRUD Forum
+    - CRUD Wishlist
+- Kontributor: 
     - Memberi rating dan testimoni/ulasan. 
     - Melihat About Website
-    - Menulis produk baru
-    - Edit produk
-    - Delete produk
-- Admin:
-    - Semua Fungsionalitas dari user
-    - Accept/Reject update dari Contributor
+    - CRUD Produk baru
+    - CRUD Promo
+
 
 ## Link Deployment
 http://raihan-akbar-bandungcouture.pbp.cs.ui.ac.id/
