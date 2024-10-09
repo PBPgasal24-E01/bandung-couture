@@ -16,28 +16,16 @@ Kebermanfaatannya:
 3. Rekomendasi untuk para pengunjung Bandung
 
 ## iii. Isi dari Modul Aplikasi
-- Modul Auth:
-    - Login/Register
-- Modul About Website: 
-    - Details Website
-    - Kritik/Saran Aplikasi
-- Modul Main Page: 
-    - Product cards
-    - Filter produk/merk
-- Modul show product: 
-    - Nampilin Deskripsi, foto dan details dari brand. 
-    - Nampilin rating dan list ulasan. 
-- Modul Penilaian: 
-    - Memberi rating 
-    - Memberi testimoni/ulasan 
-- Modul Produk Kontributor: 
-    - Membuat Produk
-    - Edit Produk 
-    - Delete Produk
-- Modul Admin: 
-    - Menampilkan Product yang diganti
-    - Accept/Reject Changes
-
+- Modul Buat Produk: (Regina)
+    - CRUD Produk 
+- Modul Buat Testimoni + rating: (Raihan)
+    - CRUD Testimoni
+- Modul Buat Forum: (Yose)
+    - CRUD Forum 
+- Modul Buat Profil: (Dava)
+    - CRUD Buat Profil
+- Modul Wishlist: (Jonathan)
+    - CRUD Wishlist
 
 
 ## iv. Initial Dataset
@@ -50,8 +38,6 @@ Dataset yang sudah kami peroleh kami kumpulkan ke dalam link https://docs.google
     - Filter produk
     - Memberi rating dan testimoni/ulasan. 
     - Melihat About Website
-- Contributor:
-    - Semua Fungsionalitas dari user
     - Menulis produk baru
     - Edit produk
     - Delete produk
