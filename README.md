@@ -1,4 +1,4 @@
-# Bandung Cuoture
+# Bandung Couture
 
 ## i. Nama-nama Kelompok
 - 2306152506 Raihan Akbar
@@ -16,27 +16,28 @@ Kebermanfaatannya:
 3. Rekomendasi untuk para pengunjung Bandung
 
 ## iii. Isi dari Modul Aplikasi
-Modul Auth:
-- Login/Register
-Modul About Website: 
-- Details Website
-- Kritik/Saran Aplikasi
-Modul Main Page: 
-- Product cards
-- Filter produk/merk
-Modul show product: 
-- Nampilin Deskripsi, foto dan details dari brand. 
-- Nampilin rating dan list ulasan. 
-Modul Penilaian: 
-- Memberi rating 
-- Memberi testimoni/ulasan 
-Modul Produk Kontributor: 
-- Membuat Produk
-- Edit Produk 
-- Delete Produk
-Modul Admin: 
-- Menampilkan Product yang diganti
-- Accept/Reject Changes
+- Modul Auth:
+    - Login/Register
+- Modul About Website: 
+    - Details Website
+    - Kritik/Saran Aplikasi
+- Modul Main Page: 
+    - Product cards
+    - Filter produk/merk
+- Modul show product: 
+    - Nampilin Deskripsi, foto dan details dari brand. 
+    - Nampilin rating dan list ulasan. 
+- Modul Penilaian: 
+    - Memberi rating 
+    - Memberi testimoni/ulasan 
+- Modul Produk Kontributor: 
+    - Membuat Produk
+    - Edit Produk 
+    - Delete Produk
+- Modul Admin: 
+    - Menampilkan Product yang diganti
+    - Accept/Reject Changes
+
 
 
 ## iv. Initial Dataset
@@ -45,10 +46,17 @@ Dataset yang sudah kami peroleh kami kumpulkan ke dalam link https://docs.google
 
 ## v. Role Pengguna
 - User:
-    - Melihat produk/filter produk, memberi rating dan testimoni/ulasan. 
+    - Melihat produk
+    - Filter produk
+    - Memberi rating dan testimoni/ulasan. 
+    - Melihat About Website
 - Contributor:
-    - Menulis produk baru/edit produk/delete produk
-- Admin: (low priority)
+    - Semua Fungsionalitas dari user
+    - Menulis produk baru
+    - Edit produk
+    - Delete produk
+- Admin:
+    - Semua Fungsionalitas dari user
     - Accept/Reject update dari Contributor
 
 ## Link Deployment
