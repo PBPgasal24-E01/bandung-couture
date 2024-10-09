@@ -16,13 +16,26 @@ Kebermanfaatannya:
 3. Rekomendasi untuk para pengunjung Bandung
 
 ## iii. Isi dari Modul Aplikasi
+Modul Auth:
 - Login/Register
-- admin-django (low priority) 
+Modul About Website: 
+- Details Website
+- Kritik/Saran Aplikasi
+Modul Main Page: 
+- Product cards
 - Filter produk/merk
-- memberi rating (low priority)
-- memberi testimoni/ulasan (low priority)
+Modul show product: 
+- Nampilin Deskripsi, foto dan details dari brand. 
+- Nampilin rating dan list ulasan. 
+Modul Penilaian: 
+- Memberi rating 
+- Memberi testimoni/ulasan 
+Modul Produk Kontributor: 
 - Membuat Produk
-- Edit/Delete Produk
+- Edit Produk 
+- Delete Produk
+Modul Admin: 
+- Menampilkan Product yang diganti
 - Accept/Reject Changes
 
 
