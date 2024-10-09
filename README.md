@@ -40,10 +40,11 @@ Dataset yang sudah kami peroleh kami kumpulkan ke dalam link https://docs.google
     - CRUD Forum
     - CRUD Wishlist
 - Kontributor: 
-    - Memberi rating dan testimoni/ulasan. 
-    - Melihat About Website
-    - CRUD Produk baru
+    - Melihat Produk
+    - Filter Produk
+    - CRUD Produk
     - CRUD Promo
+    - CRUD Forum
 
 
 ## Link Deployment
