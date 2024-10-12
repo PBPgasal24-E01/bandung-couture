@@ -22,10 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-f&9r7l-n3tnf2g^do6!apnv5=u(dd8_ls9nj=5n6k%a9_-#y)f'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+import os
+PRODUCTION = os.getenv("PRODUCTION", False)
+DEBUG = not PRODUCTION
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
 if DEBUG:
     STATICFILES_DIRS = [
         BASE_DIR / 'static' # merujuk ke /static root project pada mode development
