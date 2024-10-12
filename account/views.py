@@ -20,10 +20,8 @@ def register(request):
             user.refresh_from_db()  
             # load the profile instance created by the signal
             user.save()
-            raw_password = form.cleaned_data.get('password1')
 
-            response = HttpResponseRedirect(reverse("account:show_main"))
-            return response
+            return redirect('account:login')
     else:
         form = RegistrationForm()
     return render(request, 'register.html', {'form': form})
@@ -35,10 +33,14 @@ def login_user(request):
   
         if form.is_valid():
             user = form.get_user()
-            login(request, user)
-            response = HttpResponseRedirect(reverse("main:show_main"))
-            response.set_cookie('last_login', str(datetime.datetime.now()))
-            return response
+            if user:
+                login(request, user)
+                response = HttpResponseRedirect(reverse("main:show_main"))
+                response.set_cookie('last_login', str(datetime.datetime.now()))
+                return response
+
+            else :
+                print("User is None")
 
     else:
         form = AuthenticationForm(request)
