@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.core import serializers
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
@@ -10,17 +10,23 @@ from django.urls import reverse
 from django.shortcuts import reverse
 import datetime
 
+from account.forms import RegistrationForm
+ 
 def register(request):
-    form = UserCreationForm()
-
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Your account has been successfully created!')
-            return redirect('main:login')
-    context = {'form':form}
-    return render(request, 'register.html', context)
+            user = form.save()
+            user.refresh_from_db()  
+            # load the profile instance created by the signal
+            user.save()
+            raw_password = form.cleaned_data.get('password1')
+
+            response = redirect("login")
+            return response
+    else:
+        form = RegistrationForm()
+    return render(request, 'register.html', {'form': form})
 
 
 def login_user(request):
