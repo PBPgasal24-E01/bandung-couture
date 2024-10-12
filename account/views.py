@@ -22,7 +22,7 @@ def register(request):
             user.save()
             raw_password = form.cleaned_data.get('password1')
 
-            response = redirect("login")
+            response = HttpResponseRedirect(reverse("account:show_main"))
             return response
     else:
         form = RegistrationForm()
