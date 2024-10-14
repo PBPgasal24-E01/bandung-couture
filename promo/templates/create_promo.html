@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Add New Promo</h1>
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}  <!-- Menampilkan form secara otomatis -->
+  <button type="submit">Add Promo</button>
+</form>
+
+{% endblock %}

@@ -15,8 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from promo.views import show_promo
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', show_promo, name='home'), 
+    path('promo/', include('promo.urls', namespace='promo')),  # Include URL dari aplikasi promo
 ]

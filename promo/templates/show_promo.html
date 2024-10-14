@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+    <h1>Brand Promotions</h1>
+    <div>
+        {% if promos %}
+            <ul>
+                {% for promo in promos %}
+                    <li>
+                        <h2>{{ promo.title }}</h2>
+                        <p>{{ promo.description }}</p>
+                        <p><strong>Discount:</strong> {{ promo.discount_percentage }}%</p>
+                        <p><strong>Promo Code:</strong> {{ promo.promo_code }}</p>
+                        <p><strong>Valid Until:</strong> {{ promo.end_date }}</p>
+                        <a href="{% url 'promo:update_promo' promo.id %}">
+                            <button>Update Promo</button>
+                        </a>
+                        <a href="{% url 'promo:delete_promo' promo.id %}">
+                            <button>Delete Promo</button>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No active promotions at the moment.</p>
+        {% endif %}
+    </div>
+    <a href="{% url 'promo:create_promo' %}">
+        <button>Add Promo</button>
+    </a>
+{% endblock content %}
