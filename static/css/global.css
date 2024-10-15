@@ -19,5 +19,6 @@
     animation: shine 3s infinite;
 }
 body {
-    background-color: #F3F4F6;
+    font-family: 'Segoe UI';
+    background-color: #f3f4f6;
 }
