@@ -1,27 +1,9 @@
 <div class="bg-black w-full h-16 flex items-center justify-center select-none text-white">
     <div class="text-2xl ml-4 mr-10">Bandung Couture</div>
-    <div class="navigation-buttons hover:bg-gray-800" data-href="{% url 'main:home' %}">Home</div>
-    <div class="navigation-buttons hover:bg-gray-800" data-href="/">Products</div>
-    <div class="navigation-buttons hover:bg-gray-800" data-href="/">Promo</div>
-    <div class="navigation-buttons hover:bg-gray-800" data-href="/">Wishlist</div>
-    <div class="navigation-buttons hover:bg-gray-800" data-href="/">Forum</div>
-    <div class="navigation-buttons bg-red-700" data-href="{% url 'account:login' %}">Logout</div>
+    <a href="{% url 'main:home' %}" class="navigation-buttons w-32 h-9 rounded cursor-pointer mx-5 flex items-center justify-center hover:bg-gray-800">Home</a>
+    <a href="" class="navigation-buttons w-32 h-9 rounded cursor-pointer mx-5 flex items-center justify-center hover:bg-gray-800">Products</a>
+    <a href="" class="navigation-buttons w-32 h-9 rounded cursor-pointer mx-5 flex items-center justify-center hover:bg-gray-800">Promo</a>
+    <a href="" class="navigation-buttons w-32 h-9 rounded cursor-pointer mx-5 flex items-center justify-center hover:bg-gray-800">Wishlist</a>
+    <a href="" class="navigation-buttons w-32 h-9 rounded cursor-pointer mx-5 flex items-center justify-center hover:bg-gray-800">Forum</a>
+    <a href="{% url 'account:login' %}" class="navigation-buttons w-32 h-9 rounded cursor-pointer mx-5 flex items-center justify-center bg-red-700">Logout</a>
 </div>
-
-<script>
-    document.querySelectorAll('.navigation-buttons').forEach((button) => {
-        button.classList.add(
-            'w-32', 
-            'h-9', 
-            'rounded',
-            'cursor-pointer', 
-            'mx-5', 
-            'flex', 
-            'items-center', 
-            'justify-center',
-        );
-        button.addEventListener('click', (event) => {
-            window.location.href = button.getAttribute('data-href');
-        });
-    });
-</script>
