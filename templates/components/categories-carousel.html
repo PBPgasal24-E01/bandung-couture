@@ -1,0 +1,53 @@
+<div class="carousel-container h-96 bg-gray-200 flex items-center justify-center">
+    <div class="left-button w-0 h-0 border-t-[48px] border-b-[48px] border-r-[32px] border-transparent border-r-black hover:border-r-gray-700 cursor-pointer invisible"></div>
+    <div class="carousel-track w-[90%] h-[90%] overflow-hidden">
+        <div class="carousel-items h-full flex transition-transform duration-300">
+            {% for category in categories %}
+                <div class="carousel-item flex-shrink-0 w-[24%] h-full bg-gray-300 ml-[0.8%] border-gray-200 border-2 border-solid box-border cursor-pointer">
+
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="right-button w-0 h-0 border-t-[48px] border-b-[48px] border-l-[32px] border-transparent border-l-black hover:border-l-gray-700 cursor-pointer"></div>
+</div>
+
+<script>
+    const carouselTrack = document.querySelector('.carousel-track');
+    const carouselItems = document.querySelector('.carousel-items');
+
+    const leftButton = document.querySelector('.left-button');
+    const rightButton = document.querySelector('.right-button');
+
+    const carouselItemsCount = document.querySelectorAll('.carousel-item').length;
+
+    if(carouselItemsCount <= 4){
+        rightButton.classList.add('invisible')
+    }
+
+    let dx = 0;
+    document.querySelector('.left-button').addEventListener('click', () => {
+        if(dx > 0){
+            dx--;
+            carouselItems.style.transform = `translateX(-${(dx * 24.8)}%)`
+        }
+        if(dx == 0){
+            leftButton.classList.add('invisible')
+        }
+        if(dx == carouselItemsCount - 5){
+            rightButton.classList.remove('invisible');
+        }
+    });
+    document.querySelector('.right-button').addEventListener('click', () => {
+        if(dx < carouselItemsCount - 4){
+            dx++;
+            carouselItems.style.transform = `translateX(-${dx * 24.8}%)`
+        }
+        if(dx == 1){
+            leftButton.classList.remove('invisible')
+        }
+        if(dx == carouselItemsCount - 4){
+            rightButton.classList.add('invisible');
+        }
+    });
+</script>

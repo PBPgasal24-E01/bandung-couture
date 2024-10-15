@@ -2,4 +2,16 @@
 
 {% block content %}
     {% include 'components/navigation-bar.html' %}
+
+    {% if categories %}
+        {% include 'components/categories-carousel.html' with categories=categories %}
+    {% endif %}
+
+    {% if stores %}
+        {% for store in stores %}
+            {% include 'components/store-card.html' with store=store %}
+        {% endfor %}
+    {% else %}
+
+    {% endif %}
 {% endblock %}
