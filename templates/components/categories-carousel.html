@@ -1,10 +1,14 @@
-<div class="carousel-container h-96 bg-gray-200 flex items-center justify-center">
+{% load static %}
+
+<div class="carousel-container h-[400px] bg-gray-200 flex items-center justify-center">
     <div class="left-button w-0 h-0 border-t-[48px] border-b-[48px] border-r-[32px] border-transparent border-r-black hover:border-r-gray-700 cursor-pointer invisible"></div>
     <div class="carousel-track w-[90%] h-[90%] overflow-hidden">
         <div class="carousel-items h-full flex transition-transform duration-300">
             {% for category in categories %}
-                <div class="carousel-item flex-shrink-0 w-[24%] h-full bg-gray-300 ml-[0.8%] border-gray-200 border-2 border-solid box-border cursor-pointer">
-
+                <div data-category="{{ category.name }}" class="carousel-item flex-shrink-0 w-[24%] h-[96%] bg-cover bg-center bg-no-repeat ml-[0.8%] border-gray-200 border-2 border-solid box-border cursor-pointer hover:translate-y-[4%] transition-transform duration-200 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-black text-3xl font-bold z-10 overflow-hidden">
+                        {{ category.name }}
+                    </div>
                 </div>
             {% endfor %}
         </div>
@@ -49,5 +53,14 @@
         if(dx == carouselItemsCount - 4){
             rightButton.classList.add('invisible');
         }
+    });
+
+    document.querySelectorAll('.carousel-item').forEach((item) => {
+        let randomInt = Math.floor(Math.random() * 5); 
+        item.style.backgroundImage = `url('/static/images/category-default-${randomInt}.jpg')`;
+
+        item.addEventListener('click', () => {
+            window.location.href = `/stores/show?category=${item.getAttribute('data-category')}`
+        });
     });
 </script>

@@ -2,10 +2,9 @@
 
 {% block content %}
     {% include 'components/navigation-bar.html' %}
+    {% include 'components/categories-carousel.html' with categories=categories %}
 
-    {% if categories %}
-        {% include 'components/categories-carousel.html' with categories=categories %}
-    {% endif %}
+    {{ category_name }}
 
     {% if stores %}
         {% for store in stores %}
