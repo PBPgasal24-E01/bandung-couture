@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'components/navigation-bar.html' %}
+    {% include 'components/categories-carousel.html' with categories=categories %}
+
+    {{ category_name }}
+
+    {% if stores %}
+        {% for store in stores %}
+            {% include 'components/store-card.html' with store=store %}
+        {% endfor %}
+    {% else %}
+
+    {% endif %}
+{% endblock %}

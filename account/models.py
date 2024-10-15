@@ -6,12 +6,8 @@ from django.contrib.postgres.fields import ArrayField
 class User(AbstractUser):
   VISITOR = 1
   CONTRIBUTOR = 1
-  
-
   ROLE_CHOICES = (
       (VISITOR, 'Visitor'),
       (CONTRIBUTOR, 'Contributor'),
   )
   role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True)
-  
-
