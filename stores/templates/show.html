@@ -4,11 +4,11 @@
     {% include 'components/navigation-bar.html' %}
     {% include 'components/categories-carousel.html' with categories=categories %}
     
-    <div class="flex flex-col items-center my-4">
-        <h1 class="text-3xl font-bold">Stores</h1>
-        <h2 class="text-2xl">Category: {{ category_name }}</h2>
-    </div>
     {% if stores %}
+        <div class="flex flex-col items-center my-4">
+            <h1 class="text-3xl font-bold">Stores</h1>
+            <h2 class="text-2xl">Category: {{ category_name }}</h2>
+        </div>
         <div class="grid grid-cols-2">
             {% for store in stores %}
                 <div class="h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">

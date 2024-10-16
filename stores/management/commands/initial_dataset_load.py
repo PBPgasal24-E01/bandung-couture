@@ -49,3 +49,5 @@ class Command(BaseCommand):
                 category_instance = Category.objects.get(name=category)
                 store.categories.add(category_instance)
                 store.save()
+
+        print('Initial dataset loaded successfully')
