@@ -7,9 +7,11 @@
     {{ category_name }}
 
     {% if stores %}
-        {% for store in stores %}
-            {% include 'components/store-card.html' with store=store %}
-        {% endfor %}
+        <div class="display-grid">
+            {% for store in stores %}
+                {% include 'components/store-card.html' with store=store %}
+            {% endfor %}
+        </div> 
     {% else %}
 
     {% endif %}

@@ -15,9 +15,9 @@
         </div>
 
         <div class="flex h-[25%] overflow-hidden">
-            {% for category in store.category.all %}
+            {% for category in store.categories.all %}
                 <div class="bg-black text-white w-[23%] mr-[2.2%] rounded flex flex-shrink-0 justify-center items-center">
-                    <p>{{ category }}</p>
+                    <p>{{ category.name }}</p>
                 </div>
             {% endfor %}
         </div>
