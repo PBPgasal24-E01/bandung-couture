@@ -12,7 +12,7 @@ def show(request):
         stores = Store.objects.all()
     else:
         category = Category.objects.filter(name=category_name)[0]
-        stores = Store.objects.filter(category__in=[category])
+        stores = Store.objects.filter(categories__in=[category])
 
     return render(request, 'show.html', {
         'categories': Category.objects.all(),
