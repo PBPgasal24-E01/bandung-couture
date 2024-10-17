@@ -22,10 +22,8 @@ def add_forum_entry_ajax(request):
     details = strip_tags(request.POST.get("details")) # strip HTML tags!
     parent = request.POST.get("parent")
     user = request.user
-    print(type(user))
     new_forum = Forum(
         title=title, details=details,
-        parent=parent,
         user=user
     )
     new_forum.save()

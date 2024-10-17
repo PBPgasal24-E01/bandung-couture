@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block meta %}
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+{% endblock meta %}
 
 {% block content %}
     {% include 'components/navigation-bar.html' %}
@@ -28,8 +31,8 @@
       <div class="px-6 py-4 space-y-6 form-style">
         <form id="forumEntryForm">
           <div class="mb-4">
-            <label for="forum" class="block text-sm font-medium text-gray-700">Title</label>
-            <input type="text" id="forum" name="forum" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter your forum title" required>
+            <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+            <input type="text" id="title" name="title" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter your forum title" required>
           </div>
           <div class="mb-4">
             <label for="details" class="block text-sm font-medium text-gray-700">Details</label>
@@ -66,24 +69,29 @@
         } else {
           classNameString =
             "columns-1 gap-6 space-y-6 w-full";
-          forumEntries.forEach((item) => {
+            forumEntries.forEach((item) => {
                     const title = DOMPurify.sanitize(item.fields.title);
                     const details = DOMPurify.sanitize(item.fields.details);
                     htmlString += `
-                            <div class="bg-white shadow-lg rounded-lg overflow-hidden mb-6 relative">
-                                <div class="flex items-center justify-between p-4 bg-gray-800 text-white">
-                                    <div>
-                                        <h3 class="text-xl font-bold">${title}</h3>
-                                    </div>
-                                </div>
-                                <div class="p-4">
-                                    <p class="font-semibold text-gray-800 mb-2">Details</p>
-                                    <p class="text-gray-700"> ${details}</p>    
+                        <div class="max-w-4xl px-10 py-6 bg-white rounded-lg shadow-md">
+                            <div class="flex justify-between items-center">
+                                <span class="font-light text-gray-600">${item.fields.time}</span>
+                            </div>
+                            <div class="mt-2">
+                                <a class="text-2xl text-gray-700 font-bold hover:underline" href="#">${title}</a>
+                                <p class="mt-2 text-gray-600">${details}</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-4">
+                                <a class="text-blue-500 hover:underline" href="#">Read more</a>
+                                <div>
+                                    <a class="flex items-center" href="#">
+                                        <h1 class="text-gray-700 font-bold hover:underline">${item.fields.user}</h1>
+                                    </a>
                                 </div>
                             </div>
-    
-                `;
-          });
+                        </div>
+                    `;
+            });
         }
         document.getElementById("forum_entry_cards").className = classNameString;
         document.getElementById("forum_entry_cards").innerHTML = htmlString;
@@ -93,8 +101,6 @@
     function addForumEntry() {
         let formData = new FormData(document.querySelector("#forumEntryForm"))
         formData.append('parent', null)
-        let userId = document.querySelector("#userId").value; 
-        formData.append('user', userId);
         fetch("{% url 'forum:add_forum_entry_ajax' %}", {
             method: "POST",
             body: formData,
@@ -140,6 +146,7 @@
     document.getElementById("cancelButton").addEventListener("click", hideModal);
     document.getElementById("closeModalBtn").addEventListener("click", hideModal);
     document.getElementById("submitForumEntry").onclick = addForumEntry;
+    document.getElementById("submitForumEntry").addEventListener("click", hideModal);
 
 </script>
 {% endblock %}
