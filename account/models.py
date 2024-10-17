@@ -11,3 +11,6 @@ class User(AbstractUser):
       (CONTRIBUTOR, 'Contributor'),
   )
   role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True)
+  
+  def __str__(self):
+    return self.username
