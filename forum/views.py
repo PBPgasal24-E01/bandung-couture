@@ -13,18 +13,21 @@ def show_forum_page(request):
 
 def show_root_json(request) :
     data = Forum.objects.filter(parent__isnull=True)
+    for forum_data in data : 
+        forum_data['fields']['username'] = forum_data.user.username
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 @csrf_exempt
 @require_POST
 def add_forum_entry_ajax(request):
-    title = strip_tags(request.POST.get("title")) # strip HTML tags!
-    details = strip_tags(request.POST.get("details")) # strip HTML tags!
+    title = strip_tags(request.POST.get("title"))
+    details = strip_tags(request.POST.get("details")) 
     parent = request.POST.get("parent")
     user = request.user
     new_forum = Forum(
         title=title, details=details,
-        user=user
+        parent=parent,
+        user=user,
     )
     new_forum.save()
 
