@@ -35,7 +35,7 @@ def login_user(request):
             user = form.get_user()
             if user:
                 login(request, user)
-                response = HttpResponseRedirect(reverse("main:show_main"))
+                response = HttpResponseRedirect(reverse("main:home"))
                 response.set_cookie('last_login', str(datetime.datetime.now()))
                 return response
 
@@ -49,6 +49,6 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    response = HttpResponseRedirect(reverse('main:login'))
+    response = HttpResponseRedirect(reverse('account:login'))
     response.delete_cookie('last_login')
     return response
