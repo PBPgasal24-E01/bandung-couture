@@ -5,6 +5,7 @@ from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -13,9 +14,29 @@ def show_forum_page(request):
 
 def show_root_json(request) :
     data = Forum.objects.filter(parent__isnull=True)
-    for forum_data in data : 
-        forum_data['fields']['username'] = forum_data.user.username
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    current_user = request.user
+    forum_entries = []
+    
+    for forum_data in data:
+        
+        entry = {
+            'pk':forum_data.pk,
+            'fields':{
+                'id': forum_data.user.id,
+                'title': forum_data.title,
+                'details': forum_data.details,
+                'time': forum_data.time,  
+                'username': forum_data.user.username,  
+                'is_author': (current_user.id == forum_data.user.id),
+            }
+        }
+        
+        
+            
+        forum_entries.append(entry)
+
+    # Return the data as JSON
+    return JsonResponse(forum_entries, safe=False)
 
 @csrf_exempt
 @require_POST
@@ -26,7 +47,6 @@ def add_forum_entry_ajax(request):
     user = request.user
     new_forum = Forum(
         title=title, details=details,
-        parent=parent,
         user=user,
     )
     new_forum.save()
