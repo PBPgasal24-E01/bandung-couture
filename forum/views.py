@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
 from django.http import JsonResponse
+from forum.forms import ForumEntryForm
 
 
 # Create your views here.
@@ -52,3 +53,35 @@ def add_forum_entry_ajax(request):
     new_forum.save()
 
     return HttpResponse(b"CREATED", status=201)
+
+@csrf_exempt
+@require_POST
+def edit_forum(request): 
+    forum = Forum.objects.get(pk=request.POST.get("pk"))
+    print("successfully get forum")
+    
+    form = ForumEntryForm(request.POST or None, instance=forum)
+    print("successfully get form")
+
+    if form.is_valid() and request.method == "POST":
+        
+        if(request.user != forum.user) :
+            return HttpResponse(b"Failed, unauthorized", status=401)
+        
+        form.save()
+        return HttpResponse(b"EDITED", status=201)
+    
+    return HttpResponse(b"Failed", status=400)
+
+@csrf_exempt
+@require_POST
+def delete_forum(request):
+    forum = Forum.objects.get(pk = request.POST.get("pk"))
+    # Hapus forum
+    
+    print (request.user, forum.user)
+    if(request.user != forum.user) :
+        return HttpResponse(b"Failed, unauthorized", status=401)
+    
+    forum.delete()
+    return HttpResponse(b"DELETED", status=201) 
