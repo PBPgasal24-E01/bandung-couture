@@ -17,9 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from promo.views import show_promo
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', show_promo, name='home'), 
-    path('promo/', include('promo.urls', namespace='promo')),  # Include URL dari aplikasi promo
+    path('', include('main.urls')),  # Mengarahkan ke URLs di aplikasi main
+    path('account/', include('account.urls')),  # Mengarahkan ke URLs di aplikasi account
+    path('promo/', include('promo.urls', namespace='showpromo')),  # Include URL dari aplikasi promo
+    path('stores/', include('stores.urls', namespace='stores'))
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

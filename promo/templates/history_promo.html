@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'components/navigation-bar.html' %}
+
+<div class="container mx-auto mt-8">
+    <div class="bg-gray-100 rounded-lg shadow-md p-6 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold">Hi, {{ request.user.username }}!</h1>
+            <p class="text-gray-600">Last login: {{ request.user.last_login|date:"d M Y H:i" }}</p>
+            <p class="text-blue-500 mt-4">Berikut adalah riwayat promo yang sudah kamu buat.</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-bold mb-2">Total Kupon yang Telah Diredeem oleh Visitor</h2>
+            <p class="text-gray-600"><strong id="total-redeemed">{{ total_redeemed }}</strong> kupon diredeem dari promo yang kamu buat.</p>
+        </div>
+    </div>
+
+    <div class="bg-white mt-6 rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold mb-4">Riwayat Promo yang Sudah Kamu Buat</h2>
+        <ul>
+            {% for promo in user_promos %}
+                <li class="border-b border-gray-300 py-2 {% if promo.end_date < current_time %}bg-gray-200{% else %}bg-white{% endif %}">
+                    <div class="flex justify-between">
+                        <div>
+                            <p class="font-semibold">{{ promo.title }}</p>
+                            <p class="text-sm text-gray-600">{{ promo.description }}</p>
+                            <p class="text-sm text-gray-600">Diskon: {{ promo.discount_percentage }}%</p>
+                            <p class="text-sm text-gray-600">Kode Promo: {{ promo.promo_code }}</p>
+                            <p class="text-sm {% if promo.end_date < current_time %}text-red-500{% else %}text-gray-800{% endif %}">
+                                Valid Hingga: {{ promo.end_date|date:"d M Y" }}
+                            </p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="{% url 'promo:update_promo' promo.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Edit</a>
+                            <a href="{% url 'promo:delete_promo' promo.id %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Delete</a>
+                        </div>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="text-center text-gray-500">Kamu belum membuat promo apapun.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+    function updateTotalRedeemed() {
+        fetch("{% url 'promo:get_total_redeemed' %}")
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('total-redeemed').textContent = data.total_redeemed;
+        });
+    }
+
+    setInterval(updateTotalRedeemed, 10000);
+</script>
+
+{% endblock content %}
