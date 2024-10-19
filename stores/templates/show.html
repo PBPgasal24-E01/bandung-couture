@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'components/navigation-bar.html' %}
+    {% include 'components/categories-carousel.html' with categories=categories %}
+    
+    {% if stores %}
+        <div class="flex flex-col items-center my-4">
+            <h1 class="text-3xl font-bold">Stores</h1>
+            <h2 class="text-2xl">Category: {{ category_name }}</h2>
+        </div>
+        <div class="grid grid-cols-2">
+            {% for store in stores %}
+                <div class="h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">
+                    <div class="img-section h-full w-40 flex justify-center items-center flex-shrink-0">
+                        <img class="store-image w-[90%] h-[90%]">
+                    </div>
+                    <div class="m-2 text-section flex flex-col flex-grow">
+                        <div class="h-[30%] overflow-hidden">
+                            <h1 class="text-3xl">{{ store.brand }}</h1>
+                        </div>
+                        <div class="h-[25%] overflow-hidden">
+                            <p class="text-xs">{{ store.description }}</p>
+                        </div>
+                        <div class="h-[20%] overflow-hidden">
+                            <p class="text-s">{{ store.address }}</p>
+                        </div>
+
+                        <div class="flex h-[25%] overflow-hidden">
+                            {% for category in store.categories.all %}
+                                <div class="bg-black text-white w-[23%] mr-[2.2%] rounded flex flex-shrink-0 justify-center items-center">
+                                    <p>{{ category.name }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div> 
+    {% else %}
+
+    {% endif %}
+    <script>
+        document.querySelectorAll('.store-image').forEach((image) => {
+            let index = Math.floor(Math.random() * 8)
+            image.setAttribute('src', `/static/images/store-default-${index}.jpg`);
+        });
+    </script>
+{% endblock %}
+
