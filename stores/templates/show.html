@@ -1,14 +1,40 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     {% include 'components/navigation-bar.html' %}
-    {% include 'components/categories-carousel.html' with categories=categories %}
-    
-    {% if stores %}
-        <div class="flex flex-col items-center my-4">
-            <h1 class="text-3xl font-bold">Stores</h1>
-            <h2 class="text-2xl">Category: {{ category_name }}</h2>
+    <div class="carousel-container h-[400px] bg-gray-200 flex items-center justify-center">
+        <div class="left-button w-0 h-0 border-t-[48px] border-b-[48px] border-r-[32px] border-transparent border-r-black hover:border-r-gray-700 cursor-pointer invisible"></div>
+        <div class="carousel-track w-[90%] h-[90%] overflow-hidden">
+            <div class="carousel-items h-full flex transition-transform duration-300">
+                <div data-category="All" class="carousel-item flex-shrink-0 w-[24%] h-[96%] bg-cover bg-center bg-no-repeat ml-[0.8%] border-gray-200 border-2 border-solid box-border cursor-pointer hover:translate-y-[4%] transition-transform duration-200 relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-black text-3xl font-bold z-10 overflow-hidden">
+                        All
+                    </div>
+                </div>
+                {% for category in categories %}
+                    <div data-category="{{ category.name }}" class="carousel-item flex-shrink-0 w-[24%] h-[96%] bg-cover bg-center bg-no-repeat ml-[0.8%] border-gray-200 border-2 border-solid box-border cursor-pointer hover:translate-y-[4%] transition-transform duration-200 relative">
+                        <div class="absolute inset-0 flex items-center justify-center text-black text-3xl font-bold z-10 overflow-hidden">
+                            {{ category.name }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
+        <div class="right-button w-0 h-0 border-t-[48px] border-b-[48px] border-l-[32px] border-transparent border-l-black hover:border-l-gray-700 cursor-pointer"></div>
+    </div>
+
+    {% if user.role == 2 %} <!--If the user is contributor-->
+        <div class="control-panel flex justify-evenly items-center rounded bg-gray-200 h-20 mt-4">
+            <a href="{% url 'stores:show-own' %}" class="w-[10%]"><div class="h-12 bg-black hover:bg-gray-800 text-white rounded flex justify-center items-center">My Products</div></a>
+        </div>
+    {% endif %}
+    
+    <div class="flex flex-col items-center my-4">
+        <h1 class="text-3xl font-bold">Stores</h1>
+        <h2 class="text-2xl">Category: {{ category_name }}</h2>
+    </div>
+    {% if stores %}
         <div class="grid grid-cols-2">
             {% for store in stores %}
                 <div class="h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">
@@ -38,12 +64,66 @@
             {% endfor %}
         </div> 
     {% else %}
-
+        <div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center justify-center">
+            <img src="{% static 'images/sad-face.png' %}" alt="Sad Face" class="h-1/2">
+            <h3 class="text-lg">There is no store yet in this category</h3>
+        </div>
     {% endif %}
+    <div class="h-4"></div>
+
     <script>
         document.querySelectorAll('.store-image').forEach((image) => {
             let index = Math.floor(Math.random() * 8)
             image.setAttribute('src', `/static/images/store-default-${index}.jpg`);
+        });
+
+        const carouselTrack = document.querySelector('.carousel-track');
+        const carouselItems = document.querySelector('.carousel-items');
+    
+        const leftButton = document.querySelector('.left-button');
+        const rightButton = document.querySelector('.right-button');
+    
+        const carouselItemsCount = document.querySelectorAll('.carousel-item').length;
+    
+        if(carouselItemsCount <= 4){
+            rightButton.classList.add('invisible')
+        }
+    
+        let dx = 0;
+        document.querySelector('.left-button').addEventListener('click', () => {
+            if(dx > 0){
+                dx--;
+                carouselItems.style.transform = `translateX(-${(dx * 24.8)}%)`
+            }
+            if(dx == 0){
+                leftButton.classList.add('invisible')
+            }
+            if(dx == carouselItemsCount - 5){
+                rightButton.classList.remove('invisible');
+            }
+        });
+        document.querySelector('.right-button').addEventListener('click', () => {
+            if(dx < carouselItemsCount - 4){
+                dx++;
+                carouselItems.style.transform = `translateX(-${dx * 24.8}%)`
+            }
+            if(dx == 1){
+                leftButton.classList.remove('invisible')
+            }
+            if(dx == carouselItemsCount - 4){
+                rightButton.classList.add('invisible');
+            }
+        });
+    
+        let index = 0 
+        document.querySelectorAll('.carousel-item').forEach((item) => {
+            item.style.backgroundImage = `url('/static/images/category-default-${index}.jpg')`;
+    
+            index = ++index % 5
+    
+            item.addEventListener('click', () => {
+                window.location.href = `/stores/show?category=${item.getAttribute('data-category')}`
+            });
         });
     </script>
 {% endblock %}
