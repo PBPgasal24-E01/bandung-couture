@@ -5,7 +5,7 @@ from django.contrib.postgres.fields import ArrayField
 # Create your models here.
 class User(AbstractUser):
   VISITOR = 1
-  CONTRIBUTOR = 1
+  CONTRIBUTOR = 2
   ROLE_CHOICES = (
       (VISITOR, 'Visitor'),
       (CONTRIBUTOR, 'Contributor'),

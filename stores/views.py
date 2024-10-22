@@ -1,6 +1,8 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from stores.models import Store, Category
 
+@login_required(login_url='/account/login')
 def show(request):
 
     category_name = request.GET.get('category', 'All')
