@@ -78,8 +78,6 @@ def edit_forum(request):
 def delete_forum(request):
     forum = Forum.objects.get(pk = request.POST.get("pk"))
     # Hapus forum
-    
-    print (request.user, forum.user)
     if(request.user != forum.user) :
         return HttpResponse(b"Failed, unauthorized", status=401)
     
