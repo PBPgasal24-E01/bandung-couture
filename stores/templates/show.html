@@ -35,34 +35,7 @@
         <h2 class="text-2xl">Category: {{ category_name }}</h2>
     </div>
     {% if stores %}
-        <div class="grid grid-cols-2">
-            {% for store in stores %}
-                <div class="h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">
-                    <div class="img-section h-full w-40 flex justify-center items-center flex-shrink-0">
-                        <img class="store-image w-[90%] h-[90%]">
-                    </div>
-                    <div class="m-2 text-section flex flex-col flex-grow">
-                        <div class="h-[30%] overflow-hidden">
-                            <h1 class="text-3xl">{{ store.brand }}</h1>
-                        </div>
-                        <div class="h-[25%] overflow-hidden">
-                            <p class="text-xs">{{ store.description }}</p>
-                        </div>
-                        <div class="h-[20%] overflow-hidden">
-                            <p class="text-s">{{ store.address }}</p>
-                        </div>
-
-                        <div class="flex h-[25%] overflow-hidden">
-                            {% for category in store.categories.all %}
-                                <div class="bg-black text-white w-[23%] mr-[2.2%] rounded flex flex-shrink-0 justify-center items-center">
-                                    <p>{{ category.name }}</p>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div> 
+        {% include 'stores-components/stores-grid.html' with stores=stores %}
     {% else %}
         <div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center justify-center">
             <img src="{% static 'images/sad-face.png' %}" alt="Sad Face" class="h-1/2">
@@ -71,60 +44,6 @@
     {% endif %}
     <div class="h-4"></div>
 
-    <script>
-        document.querySelectorAll('.store-image').forEach((image) => {
-            let index = Math.floor(Math.random() * 8)
-            image.setAttribute('src', `/static/images/store-default-${index}.jpg`);
-        });
-
-        const carouselTrack = document.querySelector('.carousel-track');
-        const carouselItems = document.querySelector('.carousel-items');
-    
-        const leftButton = document.querySelector('.left-button');
-        const rightButton = document.querySelector('.right-button');
-    
-        const carouselItemsCount = document.querySelectorAll('.carousel-item').length;
-    
-        if(carouselItemsCount <= 4){
-            rightButton.classList.add('invisible')
-        }
-    
-        let dx = 0;
-        document.querySelector('.left-button').addEventListener('click', () => {
-            if(dx > 0){
-                dx--;
-                carouselItems.style.transform = `translateX(-${(dx * 24.8)}%)`
-            }
-            if(dx == 0){
-                leftButton.classList.add('invisible')
-            }
-            if(dx == carouselItemsCount - 5){
-                rightButton.classList.remove('invisible');
-            }
-        });
-        document.querySelector('.right-button').addEventListener('click', () => {
-            if(dx < carouselItemsCount - 4){
-                dx++;
-                carouselItems.style.transform = `translateX(-${dx * 24.8}%)`
-            }
-            if(dx == 1){
-                leftButton.classList.remove('invisible')
-            }
-            if(dx == carouselItemsCount - 4){
-                rightButton.classList.add('invisible');
-            }
-        });
-    
-        let index = 0 
-        document.querySelectorAll('.carousel-item').forEach((item) => {
-            item.style.backgroundImage = `url('/static/images/category-default-${index}.jpg')`;
-    
-            index = ++index % 5
-    
-            item.addEventListener('click', () => {
-                window.location.href = `/stores/show?category=${item.getAttribute('data-category')}`
-            });
-        });
-    </script>
+    <script src="{% static 'scripts/stores/show.js' %}"></script>
 {% endblock %}
 

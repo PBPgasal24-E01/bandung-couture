@@ -6,46 +6,20 @@
 {% endblock %}
 
 {% block content %}
-
-    <form class="w-[30%] mt-[6.125%] ml-[35%] fixed">
-        <div class="add-modal hidden bg-black w-full rounded-md flex flex-col items-center text-white">
-
-            {{ form }}
-
-            <!-- <h1 class="text-2xl my-1.5">Add Store</h1>
-            <input name="brand" type="text" placeholder="store brand" class="appearance-none rounded-none w-[95%] h-10 px-3 py-2 border border-gray-300 placeholder-gray-600 text-gray-900 rounded-t focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm">
-            <textarea name="description" placeholder="store description" class="resize-none appearance-none rounded-none w-[95%] h-32 px-3 py-2 border border-gray-300 placeholder-gray-600 text-gray-900 rounded-b focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm"></textarea>
-            <h3 class="text-xl my-1">Category</h3>
-            <select name="categories" multiple size="4" class="w-1/2 rounded">
-                {% for category in categories %}
-                    <option value="{{ category.name }}" class="text-black hover:bg-gray-200">{{ category.name }}</option>
+    <div class="add-modal hidden h-[90vh] w-[30%] my-[5vh] ml-[35%] bg-gray-300 rounded-lg flex flex-col items-center">
+        <form class="w-full">
+            <div class="w-full flex flex-col items-center">
+                <div class="h-10 bg-gray-700 w-full rounded-t-md flex justify-center items-center text-2xl text-white mb-2">Add Store</div>
+                {% for field in form %}
+                    <div class="w-[90%] flex">
+                        {{ field }}
+                    </div>
                 {% endfor %}
-            </select>
-            <div class="w-full flex my-2">
-                <div class="w-1/2"></div>
-                <div class="w-1/2 flex justify-center">
-                    <button type="button" class="modal-next text-black h-10 w-3/4 rounded bg-white hover:bg-gray-200">Next</button>
-                </div>
-            </div> -->
-        </div>
-        <div class="add-second-modal hidden bg-black w-full rounded-md flex flex-col items-center text-white">
-            <h1 class="text-2xl my-1.5">Add Store</h1>
-            <textarea name="address" placeholder="store address" class="resize-none appearance-none rounded-none w-[95%] h-32 px-3 py-2 border border-gray-300 placeholder-gray-600 text-gray-900 rounded-t focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm"></textarea>
-            <input name="contact-number" type="tel" placeholder="contact number" class="appearance-none rounded-none w-[95%] h-10 px-3 py-2 border border-gray-300 placeholder-gray-600 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm">
-            <input name="website" type="text" placeholder="website" class="appearance-none rounded-none w-[95%] h-10 px-3 py-2 border border-gray-300 placeholder-gray-600 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm">
-            <input name="social-media" type="text" placeholder="social media" class="appearance-none rounded-none w-[95%] h-10 px-3 py-2 border border-gray-300 placeholder-gray-600 text-gray-900 rounded-b focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm">
-            <div class="w-full flex my-2">
-                <div class="w-1/2 flex justify-center">
-                    <button type="button" class="modal-prev text-black h-10 w-3/4 rounded bg-white hover:bg-gray-200">Previous</button>
-                </div>
-                <div class="w-1/2 flex justify-center">
-                    <button type="button" class="store-add-button text-black h-10 w-3/4 rounded bg-white hover:bg-gray-200">Add Store</button>
-                </div>
+                <button type="button" class="store-add-button text-white w-1/4 h-10 mt-2 rounded bg-gray-700 hover:bg-gray-600">Add Store</button>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
     
-
     {% include 'components/navigation-bar.html' %}
 
     <div class="flex justify-center items-center mt-4 h-20 bg-gray-200">
@@ -55,116 +29,13 @@
         <h1 class="text-3xl font-bold">My Stores Contribution</h1>
     </div>
     {% if stores %}
-        <div class="grid grid-cols-2">
-            {% for store in stores %}
-                <div class="h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">
-                    <div class="img-section h-full w-40 flex justify-center items-center flex-shrink-0">
-                        <img class="store-image w-[90%] h-[90%]">
-                    </div>
-                    <div class="m-2 text-section flex flex-col flex-grow">
-                        <div class="h-[30%] overflow-hidden">
-                            <h1 class="text-3xl">{{ store.brand }}</h1>
-                        </div>
-                        <div class="h-[25%] overflow-hidden">
-                            <p class="text-xs">{{ store.description }}</p>
-                        </div>
-                        <div class="h-[20%] overflow-hidden">
-                            <p class="text-s">{{ store.address }}</p>
-                        </div>
-
-                        <div class="flex h-[25%] overflow-hidden">
-                            {% for category in store.categories.all %}
-                                <div class="bg-black text-white w-[23%] mr-[2.2%] rounded flex flex-shrink-0 justify-center items-center">
-                                    <p>{{ category.name }}</p>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div> 
+        {% include 'stores-components/stores-grid.html' with stores=stores %}
     {% else %}
         <div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center justify-center">
             <img src="{% static 'images/sad-face.png' %}" alt="Sad Face" class="h-1/2">
             <h3 class="text-lg">You haven't contributed any store</h3>
         </div>
     {% endif %}
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const addModal = document.querySelector('.add-modal');
-            const addSecondModal = document.querySelector('.add-second-modal');
-            const modalShowButton = document.querySelector('.modal-show-button');
-            const modalForm = document.querySelector('form');
-
-            const modalNextButton = document.querySelector('.modal-next');
-            const modalPrevButton = document.querySelector('.modal-prev');
-
-            const storeAddButton = document.querySelector('.store-add-button');
-
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            function showModal() {
-                addModal.classList.remove('hidden');   
-            }
-
-            function hideModal() {
-                addModal.classList.add('hidden');
-            }
-
-            function showSecondModal() {
-                addSecondModal.classList.remove('hidden');
-            }
-
-            function hideSecondModal() {
-                addSecondModal.classList.add('hidden');
-            }
-
-            modalShowButton.addEventListener('click', () => {
-                showModal();
-            });
-
-            modalNextButton.addEventListener('click', () => {
-                hideModal();
-                showSecondModal();
-            });
-
-            modalPrevButton.addEventListener('click', () => {
-                hideSecondModal();
-                showModal();
-            });
-
-            document.querySelector('html').addEventListener('click', (event) => {
-                if (!modalForm.contains(event.target) && event.target != modalShowButton){
-                    hideModal();
-                    hideSecondModal();
-                }
-            });
-
-            storeAddButton.addEventListener('click', () => {
-               addStore();
-            });
-
-            async function addStore() {
-                fetch('/stores/add', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': csrfToken,
-                    },
-                    body: new FormData(modalForm),
-                }).then((response) => {
-                    if (response.ok) {
-                        modalForm.reset();
-                        hideSecondModal();
-                    }
-                    else {
-                        window.alert('not ok')
-                    }
-                }).catch((error) => {
-                    
-                });
-            }
-        });
-    </script>
-
+    
+    <script src="{% static 'scripts/stores/show-own.js' %}"></script>
 {% endblock %}
