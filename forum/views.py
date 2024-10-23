@@ -124,6 +124,7 @@ def show_root_json(request) :
 
 @csrf_exempt
 @require_POST
+@login_required(login_url='/account/login')
 def add_forum_entry_ajax(request):
     title = strip_tags(request.POST.get("title"))
     details = strip_tags(request.POST.get("details")) 
@@ -153,6 +154,7 @@ def add_forum_entry_ajax(request):
 
 @csrf_exempt
 @require_POST
+@login_required(login_url='/account/login')
 def edit_forum(request):
     forum = Forum.objects.get(pk=request.POST.get("pk"))
     form = ForumEntryForm(request.POST or None, instance=forum)
@@ -167,6 +169,7 @@ def edit_forum(request):
 
 @csrf_exempt
 @require_POST
+@login_required(login_url='/account/login')
 def delete_forum(request):
     print(request.POST.get("pk"))
     forum = Forum.objects.get(pk = request.POST.get("pk"))
