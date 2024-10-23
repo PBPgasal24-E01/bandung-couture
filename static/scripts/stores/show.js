@@ -43,6 +43,26 @@ document.querySelectorAll('.carousel-item').forEach((item) => {
     index = ++index % 5
 
     item.addEventListener('click', () => {
-        window.location.href = `/stores/show?category=${item.getAttribute('data-category')}`
+        refreshStoresContent(item.getAttribute('data-category'));
     });
 });
+
+//initially populate the stores content container with all stores
+refreshStoresContent();
+
+async function refreshStoresContent(category = null) {
+    var url = `/stores/deliver-all-stores-content-component`;
+    if (category != null) {
+        url = url.concat('?category=' + category);
+        document.querySelector('.category-title').innerHTML = category;
+    }
+    var response = await fetch(url);
+    var text = await response.text();
+    document.querySelector('.stores-content').innerHTML = text;
+
+    var index = 0;
+    document.querySelectorAll('.store-image').forEach((image) => {
+        index %= 8;
+        image.setAttribute('src', `/static/images/store-default-${(index++)}.jpg`);
+    });
+}
