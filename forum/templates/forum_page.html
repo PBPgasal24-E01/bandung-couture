@@ -25,7 +25,7 @@
             </div>
           
             <div>
-              <strong class="text-2xl font-medium text-gray-900"> Only Show My Forums </strong>
+              <strong onclick='checkShowMyForum()' class="text-2xl font-medium text-gray-900"> Only Show My Forums </strong>
             </div>
         </div>
       
@@ -241,7 +241,12 @@
         }).then((response) => refreshForumEntries());
     }
 
-    
+    async function checkShowMyForum(){
+        const checked = document.getElementById('user-forum').checked;
+        document.getElementById('user-forum').checked = !checked;
+
+        refreshForumEntries();
+    }
 
 </script>
 {% endblock %}
