@@ -5,6 +5,8 @@ const storeAddButton = document.querySelector('.store-add-button');
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+refreshStoresContent();
+
 function showModal() {
     addModal.classList.remove('hidden');   
     addModal.classList.add('fixed');
@@ -20,7 +22,7 @@ modalShowButton.addEventListener('click', () => {
 });
 
 document.addEventListener('click', (event) => {
-    if (!modalForm.contains(event.target) && event.target != modalShowButton){
+    if (!modalForm.contains(event.target) && event.target != modalShowButton && !addModal.classList.contains('hidden')) {
         hideModal();
     }
 });
@@ -40,11 +42,24 @@ async function addStore() {
         if (response.ok) {
             modalForm.reset();
             hideModal();
+            refreshStoresContent();
         }
         else {
             window.alert('not ok');
         }
-    }).catch((error) => {
-        window.alert('fetch fail');
+    }).catch((err) => {
+        window.alert();
+    });
+}
+
+async function refreshStoresContent() {
+    var response = await fetch('/stores/deliver-own-stores-content-component');
+    var text = await response.text();
+    document.querySelector('.stores-content').innerHTML = text;
+
+    var index = 0;
+    document.querySelectorAll('.store-image').forEach((image) => {
+        index %= 8;
+        image.setAttribute('src', `/static/images/store-default-${(index++)}.jpg`);
     });
 }
