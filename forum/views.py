@@ -15,14 +15,14 @@ from django.utils.timezone import now
 # Create your views here.
 @login_required(login_url='/account/login')
 def show_forum_page(request):
-    return render(request, "forum_page.html", {"not_found": False})
+    return render(request, "forum_page.html", {"id_not_found": False})
 
 @login_required(login_url='/account/login')
 def show_forum_page_id(request,id):
     try :
         forum_data = Forum.objects.get(pk=id)
     except : 
-        return render(request, "forum_page.html", {"not_found": True})
+        return render(request, "forum_page.html", {"id_not_found": True})
     
     context = {
         'pk': id
