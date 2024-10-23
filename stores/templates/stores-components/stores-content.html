@@ -8,9 +8,20 @@
                     <img class="store-image w-[90%] h-[90%]">
                 </div>
                 <div class="m-2 text-section flex flex-col flex-grow">
-                    <div class="h-[30%] overflow-hidden">
-                        <h1 class="text-3xl">{{ store.brand }}</h1>
+                    <div class="h-[30%] flex">
+                        <div class="h-full w-3/4 overflow-hidden">
+                            <h1 class="text-3xl">{{ store.brand }}</h1>
+                        </div>
+                        {% if edit %}
+                            <button type="button" class="edit-store-button w-[11.5%] mr-[2%] h-full bg-gray-300 ring-[1.5px] ring-gray-400 hover:ring-1 rounded-sm">
+                                <i class="fa-pen-to-square fa-lg fa-solid"></i>
+                            </button>
+                            <button type="button" class="delete-store-button w-[11.5%] h-full bg-gray-300 ring-[1.5px] ring-gray-400 hover:ring-1 rounded-sm" data-href="{% url 'stores:delete' pk=store.pk %}">
+                                <i class="fa-trash fa-lg fa-solid"></i>
+                            </button>
+                        {% endif %}
                     </div>
+                    
                     <div class="h-[25%] overflow-hidden">
                         <p class="text-xs">{{ store.description }}</p>
                     </div>

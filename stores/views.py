@@ -47,6 +47,19 @@ def add(request):
         return JsonResponse({'message': 'SUCCESS'}, status=200)
     
     return JsonResponse({'message': 'NOT SUCCESS'}, status=400)
+
+@require_POST
+def delete(request, pk):
+
+    stores = Store.objects.filter(pk=pk, user=request.user)
+
+    #if no store found with specified primary key or requesting user is not the owner of the store
+    if not stores:
+        return JsonResponse({'message': 'NOT SUCCESS'}, status=400)
+    
+    stores[0].delete()
+    return JsonResponse({'message': 'SUCCESS'}, status=200)
+    
     
 @login_required(login_url='/account/login')
 def deliver_all_stores_content_component(request):
@@ -64,6 +77,7 @@ def deliver_all_stores_content_component(request):
 
     return render(request, 'stores-components/stores-content.html', {
         'stores': stores,
+        'edit': False,
     })
 
 def deliver_own_stores_content_component(request):
@@ -74,4 +88,5 @@ def deliver_own_stores_content_component(request):
 
     return render(request, 'stores-components/stores-content.html', {
         'stores': stores,
+        'edit': True,
     })
