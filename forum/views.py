@@ -29,6 +29,7 @@ def show_forum_page_id(request,id):
     }
     return render(request, "forum_page_id.html", context)
 
+# show all
 def show_json(request):
     data = Forum.objects.all()
     current_user = request.user
@@ -57,6 +58,7 @@ def show_json(request):
     # Return the data as JSON
     return JsonResponse(forum_entries, safe=False)
 
+# only show the id's data
 def show_json_by_id(request,id) :
     try :
         forum_data = Forum.objects.get(pk=id)
@@ -78,6 +80,7 @@ def show_json_by_id(request,id) :
 
     return JsonResponse(entry, safe=False)
 
+# only show the id's childs
 def show_json_childs_by_id(request,id) :
     data = Forum.objects.filter(parent=id)
     current_user = request.user
@@ -99,9 +102,9 @@ def show_json_childs_by_id(request,id) :
         
         forum_entries.append(entry)
 
-    # Return the data as JSON
     return JsonResponse(forum_entries, safe=False)
 
+# only show root
 def show_root_json(request) :
     data = Forum.objects.filter(parent__isnull=True).order_by("-time")
     current_user = request.user
@@ -123,7 +126,30 @@ def show_root_json(request) :
         
         forum_entries.append(entry)
 
-    # Return the data as JSON
+    return JsonResponse(forum_entries, safe=False)
+
+# filtered for the user logged in
+def show_root_json_filter_user(request) :
+    data = Forum.objects.filter(parent__isnull=True, user=request.user).order_by("-time")
+    current_user = request.user
+    forum_entries = []
+    
+    for forum_data in data:
+        
+        entry = {
+            'pk':forum_data.pk,
+            'fields':{
+                'id': forum_data.user.id,
+                'title': forum_data.title,
+                'details': forum_data.details,
+                'time': time_since(forum_data.time),  
+                'username': forum_data.user.username,  
+                'is_author': (current_user.id == forum_data.user.id),
+            }
+        }
+        
+        forum_entries.append(entry)
+
     return JsonResponse(forum_entries, safe=False)
 
 @csrf_exempt

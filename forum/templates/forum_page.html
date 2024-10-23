@@ -10,17 +10,33 @@
         {% if id_not_found %}
         <div class="text-white py-2 px-4 w-full bg-red-500 rounded-lg hover:bg-red-600">Your requested Forum discussion ID is not Found</div>
         {% endif %}
+        
+        
         <div class="flex justify-end mb-6">
-          <button class="btn bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showForumForm();">
-            Add New Forum
-          </button>
-          </div>
+            <button class="btn bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showForumForm();">
+              Add New Forum
+            </button>
+        </div>
+
+        <div class="flex cursor-pointer justify-end w-full gap-4 py-2 px-4">
+            <div class="flex items-center">
+              &#8203;
+              <input onclick='refreshForumEntries()' type="checkbox" class="size-5 rounded border-gray-300" id="user-forum" />
+            </div>
+          
+            <div>
+              <strong class="text-2xl font-medium text-gray-900"> Only Show My Forums </strong>
+            </div>
+        </div>
       
         <div id="forum_entry_cards"></div>
     </div>
 <script>
     async function getForumEntries() {
-        return fetch("{% url 'forum:show_root_json' %}").then((res) => res.json());
+        if( document.getElementById('user-forum').checked) 
+            return fetch("{% url 'forum:show_root_json_filter_user' %}").then((res) => res.json());
+        else 
+            return fetch("{% url 'forum:show_root_json' %}").then((res) => res.json());
     }
     async function refreshForumEntries() {
         document.getElementById("forum_entry_cards").innerHTML = "";
