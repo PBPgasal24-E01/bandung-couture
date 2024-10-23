@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+{% endblock meta %}
+
+{% block content %}
+    {% include 'components/navigation-bar.html' %}
+<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-gray-100 flex flex-col">
+    <div class="flex justify-end mb-6">
+      <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showModal();">
+        Add New Forum
+      </button>
+      </div>
+    <div id="forum_entry_cards"></div>
+</div>
+<div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+    <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between p-4 border-b rounded-t">
+        <h3 class="text-xl font-semibold text-gray-900">
+          Add New Forum
+        </h3>
+        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="px-6 py-4 space-y-6 form-style">
+        <form id="forumEntryForm">
+          <div class="mb-4">
+            <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+            <input type="text" id="title" name="title" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter your forum title" required>
+          </div>
+          <div class="mb-4">
+            <label for="details" class="block text-sm font-medium text-gray-700">Details</label>
+            <textarea id="details" name="details" rows="3" class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Describe your details" required></textarea>
+          </div>
+        </form>
+      </div>
+      <!-- Modal footer -->
+      <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+        <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+        <button type="submit" id="submitForumEntry" form="forumEntryForm" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+      </div>
+    </div>
+  </div>
+<script>
+    async function getForumEntries() {
+        return fetch("{% url 'forum:show_root_json' %}").then((res) => res.json());
+    }
+    async function refreshForumEntries() {
+        document.getElementById("forum_entry_cards").innerHTML = "";
+        document.getElementById("forum_entry_cards").className = "";
+        const forumEntries = await getForumEntries();
+
+        const style = document.createElement('style');
+        style.textContent = `
+            .text-wrap {
+                word-wrap: break-word;      /* Allow long words to break and wrap */
+                overflow-wrap: break-word;  /* This is a more modern alternative */
+                white-space: normal;        /* Ensure text wraps normally */
+                max-width: 100%;            /* Prevent the text from exceeding its container */
+            }
+        `;
+        document.head.append(style);
+
+        let htmlString = "";
+        let classNameString = "";
+        if (forumEntries.length === 0) {
+          classNameString =
+            "flex flex-col items-center justify-center min-h-[24rem] p-6";
+          htmlString = `
+                <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                    <p class="text-center text-gray-600 mt-4">Belum ada data forum. Silahkan buat forum.</p>
+                </div>
+            `;
+        } else {
+          classNameString =
+            "columns-1 gap-6 space-y-6 w-full";
+            forumEntries.forEach((item) => {
+                    const title = DOMPurify.sanitize(item.fields.title);
+                    const details = DOMPurify.sanitize(item.fields.details);
+
+                    let forum_username = item.fields.username;
+                    let maxLength = 15
+                    if (window.innerWidth <= 768) { // Adjust the width as per your requirement for mobile
+                        forum_username = forum_username.length > maxLength ? forum_username.slice(0, maxLength) + '...' : forum_username;
+                    }
+
+                    details_trunc = details.length > 300 ? details.slice(0, 300) + '...' : details; 
+                    htmlString += `
+                        <div class="relative break-inside-avoid" id=card-${item.pk}>
+                            <div class="px-10 py-6 bg-white rounded-lg shadow-md">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-light text-gray-600">${item.fields.time}</span>
+                                    ${item.fields.is_author ? `
+                                        <div class="absolute top-2 right-2 flex space-x-1"> <!-- Adjusted to top-right -->
+                                            <button onclick='editForum(${JSON.stringify(item.pk)})' type="button" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                                </svg>
+                                            </button>
+                                            <button onclick="deleteForum('${item.pk}')" class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                <div class="mt-2">
+                                    <a class="text-2xl text-gray-700 font-bold hover:underline" href="#">${title}</a>
+                                    <p class="mt-2 text-gray-600 text-wrap">${details_trunc}</p>
+                                    <p hidden id="details-${item.pk}">${details}</p>
+                                </div>
+                                <div class="flex justify-between items-center mt-4">
+                                    <a class="text-blue-500 hover:underline" href="#">Read more</a>
+                                    <div>
+                                        <a class="flex items-center">
+                                            <p class="text-gray-600">by  @</p>
+                                            <h1 class="text-gray-700 font-bold">${forum_username}</h1>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+            });
+        }
+        document.getElementById("forum_entry_cards").className = classNameString;
+        document.getElementById("forum_entry_cards").innerHTML = htmlString;
+    }
+    refreshForumEntries();
+    
+    function addForumEntry() {
+        let formData = new FormData(document.querySelector("#forumEntryForm"))
+        formData.append('parent', null)
+        fetch("{% url 'forum:add_forum_entry_ajax' %}", {
+            method: "POST",
+            body: formData,
+        }).then((response) => refreshForumEntries());
+    
+        document.getElementById("forumEntryForm").reset();
+        document.querySelector("[data-modal-toggle='crudModal']").click();
+    
+        return false;
+    }
+    
+    document.getElementById("forumEntryForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        addForumEntry();
+    })
+    
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+  
+    function showModal() {
+        const modal = document.getElementById('crudModal');
+        const modalContent = document.getElementById('crudModalContent');
+  
+        modal.classList.remove('hidden'); 
+        setTimeout(() => {
+          modalContent.classList.remove('opacity-0', 'scale-95');
+          modalContent.classList.add('opacity-100', 'scale-100');
+        }, 50); 
+    }
+  
+    function hideModal() {
+        const modal = document.getElementById('crudModal');
+        const modalContent = document.getElementById('crudModalContent');
+  
+        modalContent.classList.remove('opacity-100', 'scale-100');
+        modalContent.classList.add('opacity-0', 'scale-95');
+  
+        setTimeout(() => {
+          modal.classList.add('hidden');
+        }, 150); 
+    }
+  
+    document.getElementById("cancelButton").addEventListener("click", hideModal);
+    document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+    document.getElementById("submitForumEntry").onclick = addForumEntry;
+    document.getElementById("submitForumEntry").addEventListener("click", hideModal);
+
+    async function editForum(itemPk=null) {
+        // Get the existing card
+        const card = document.getElementById(`card-${itemPk}`);
+        const title = card.querySelector('.text-2xl').textContent;
+        const detailsElement = document.getElementById(`details-${itemPk}`);
+        const details = detailsElement.textContent; 
+        const forumUsername = card.querySelector('.font-bold').textContent;
+    
+        // Create the editing form HTML
+        const editFormHTML = `
+            <div class="relative break-inside-avoid" id="edit-card-${itemPk}">
+                <div class="px-10 py-6 bg-white rounded-lg shadow-md">
+                    <div class="flex justify-between items-center">
+                        <span class="font-light text-gray-600">Editing Forum</span>
+                    </div>
+                    <div class="mt-2">
+                        <input type="text" id="edit-title-${itemPk}" class="border rounded w-full p-2" value="${title}" />
+                        <textarea id="edit-details-${itemPk}" class="border rounded w-full p-2 mt-2">${details}</textarea>
+                    </div>
+                    <div class="flex justify-between items-center mt-4">
+                        <button onclick="saveForumEdit('${itemPk}')" class="bg-green-500 hover:bg-green-600 text-white rounded-full p-2 transition duration-300 shadow-md">Save</button>
+                        <button onclick="cancelEdit()" class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    
+        // Replace the existing card with the edit form
+        card.outerHTML = editFormHTML;
+    }
+    
+    async function saveForumEdit(itemPk) {
+        const title = document.getElementById(`edit-title-${itemPk}`).value;
+        const details = document.getElementById(`edit-details-${itemPk}`).value;
+    
+        // You can replace this with your AJAX call to save changes
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('details', details);
+        formData.append('pk', itemPk);
+    
+        await fetch(`{% url 'forum:edit_forum' %}`, {
+            method: 'POST',
+            body: formData,
+        }).then((response) => refreshForumEntries());
+    }
+    
+    async function cancelEdit() {
+        // Refresh the forum entries to restore the original card
+        refreshForumEntries();
+    }
+
+    async function deleteForum(itemPk) {
+        const formData = new FormData();
+        formData.append('pk', itemPk);
+
+        await fetch(`{% url 'forum:delete_forum' %}`, {
+            method: 'POST',
+            body: formData,
+        }).then((response) => refreshForumEntries());
+    }
+
+    
+
+</script>
+{% endblock %}
+

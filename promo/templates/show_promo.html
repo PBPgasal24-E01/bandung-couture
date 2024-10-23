@@ -15,10 +15,8 @@
         <div class="mb-4">
             <label for="filter" class="text-lg">Filter:</label>
             <select id="filter" class="ml-2 p-2 border rounded">
-                <option value="category">Kategori</option>
                 <option value="highest_discount">Diskon Terbanyak</option>
                 <option value="nearest_time">Waktu Terdekat</option>
-                <option value="store">Toko (Abjad)</option>
             </select>
         </div>
     </div>
@@ -73,6 +71,18 @@
         </a>
     </div>
 {% endif %}
+
+<script>
+    function filterPromos(){
+        const filterValue = document.getElementById('filter').value;
+
+        if (filterValue === 'highest_discount'){
+            window.location.href = "{% url 'promo:show_promo' %}?filter=highest_discount";
+        } else if (filterValue === 'nearest_time'){
+            window.location.href = "{% url 'promo:show_promo' %}?filter=nearest_time"
+        }
+    }
+</script>
 
 {% endblock content %}
 

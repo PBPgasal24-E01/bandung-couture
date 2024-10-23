@@ -1,20 +1,28 @@
 from django.shortcuts import render, redirect, reverse,  get_object_or_404
 from .models import Promo, RedeemedPromo
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from .forms import PromoEntryForm
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 
-@login_required(login_url='/login')
+@login_required(login_url='/account/login')
 def show_promo(request):
-    promos = Promo.objects.all()
+    now = timezone.now()
+    promos = Promo.objects.filter(
+        is_active = True, start_date__lte = now, end_date__gte = now
+    ).order_by('-discount_percentage', 'start_date')
+    
     user_role = request.user.role if request.user.is_authenticated else None  
 
     return render(request, 'show_promo.html', { 
         'promos': promos,
-        'user_role': user_role,
+        'user_role' : user_role
+        
     })
+
 
 def create_promo(request):
     if request.method == 'POST':
@@ -36,6 +44,17 @@ def update_promo(request, id):
         form.save()
         return HttpResponseRedirect(reverse('promo:show_promo'))
     return render(request, "update_promo.html", {'form': form})
+
+
+
+
+
+
+
+
+
+
+
 
 def delete_promo(request, id):
     promos = Promo.objects.get(pk=id)  

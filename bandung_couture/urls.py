@@ -26,7 +26,8 @@ urlpatterns = [
     path('', include('main.urls')),  # Mengarahkan ke URLs di aplikasi main
     path('account/', include('account.urls')),  # Mengarahkan ke URLs di aplikasi account
     path('promo/', include('promo.urls', namespace='showpromo')),  # Include URL dari aplikasi promo
-    path('stores/', include('stores.urls', namespace='stores'))
+    path('stores/', include('stores.urls', namespace='stores')),
+    path('forum/', include('forum.urls')),
 ]
 
 if settings.DEBUG:
