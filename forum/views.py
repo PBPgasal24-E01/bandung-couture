@@ -15,11 +15,15 @@ from django.utils.timezone import now
 # Create your views here.
 @login_required(login_url='/account/login')
 def show_forum_page(request):
-    return render(request, "forum_page.html", {})
+    return render(request, "forum_page.html", {"not_found": False})
 
 @login_required(login_url='/account/login')
 def show_forum_page_id(request,id):
-    current_user = request.user
+    try :
+        forum_data = Forum.objects.get(pk=id)
+    except : 
+        return render(request, "forum_page.html", {"not_found": True})
+    
     context = {
         'pk': id
     }
@@ -156,10 +160,12 @@ def add_forum_entry_ajax(request):
 @require_POST
 @login_required(login_url='/account/login')
 def edit_forum(request):
-    forum = Forum.objects.get(pk=request.POST.get("pk"))
+    try :
+        forum = Forum.objects.get(pk=request.POST.get("pk"))
+    except :
+        return HttpResponse(b"NOT FOUND", status=404)
     form = ForumEntryForm(request.POST or None, instance=forum)
 
-    
     if(request.user != forum.user) :
         return HttpResponse(b"Failed, unauthorized", status=401)
     
@@ -171,9 +177,12 @@ def edit_forum(request):
 @require_POST
 @login_required(login_url='/account/login')
 def delete_forum(request):
-    print(request.POST.get("pk"))
-    forum = Forum.objects.get(pk = request.POST.get("pk"))
-
+    try :
+        forum = Forum.objects.get(pk = request.POST.get("pk"))
+    except :
+        return HttpResponse(b"NOT FOUND", status=404)
+    
+    
     if(request.user != forum.user) :
         return HttpResponse(b"Failed, unauthorized", status=401)
     
