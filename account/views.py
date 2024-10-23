@@ -1,7 +1,4 @@
-from django.shortcuts import render, redirect 
-from django.http import HttpResponse
-from django.contrib import messages
-from django.core import serializers
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
@@ -35,7 +32,8 @@ def login_user(request):
             user = form.get_user()
             if user:
                 login(request, user)
-                response = HttpResponseRedirect(reverse("main:home"))
+                #redirect to page attempted to be accessed or home by default
+                response = redirect(request.GET.get('next', 'main:home')) 
                 response.set_cookie('last_login', str(datetime.datetime.now()))
                 return response
 
