@@ -25,6 +25,13 @@
                             </div>
                         {% endfor %}
                     </div>
+                    {% if user.role == 1 %}
+                    <div class="wishlist-section  mt-auto flex justify-end">
+                        <button data-store-id="{{ wishlist_item.store.id }}" class="wishlist-btn remove bg-red-500 text-white py-1 px-2 rounded">
+                            Remove from Wishlist
+                        </button>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

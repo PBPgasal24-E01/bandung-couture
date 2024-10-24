@@ -82,13 +82,19 @@
 
     async function refreshStoresContent(category = null) {
         let url = `/wishlist/filter/all`;
+
         if (category != null) {
             url = `/wishlist/filter/${category}`;
         }
+
         const response = await fetch(url);
-        console.log("Response from stores content:", response); // Log response
         const text = await response.text();
-        document.querySelector('.products').innerHTML = text;
+
+        if (text){
+            document.querySelector('.products').innerHTML = text;
+            attachWishlistEventListeners();
+        }
+
         refreshRecommendations();
 
         let index = 0;
@@ -97,8 +103,6 @@
             item.setAttribute('src', `/static/images/store-default-${index}.jpg`);
             index++;
         });
-        console.log(document.querySelector('.recommend').innerHTML);
-
     }
 
     document.querySelectorAll('.wishlist-categories').forEach((item) => {
@@ -114,7 +118,7 @@
 
         if (recommendedStoresHtml) {
         document.querySelector('.recommend').innerHTML = recommendedStoresHtml;
-        attachWishlistEventListeners(); 
+        attachWishlistEventListeners2(); 
         }
 
         document.querySelectorAll('.recommend-images').forEach((item) => {
@@ -123,16 +127,30 @@
         });
     }
 
-    async function toggleWishlist(storeId) {
+    async function addWishlist(storeId) {
         try {
-            const response = await fetch(`/wishlist/add/${storeId}/`, {
+            const response = await fetch(`/wishlist/add/${storeId}/` , {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': getCookie('csrftoken'),
                     'Content-Type': 'application/json',
                 },
             });
-            console.log("Toggling wishlist, response:", response);
+            await refreshStoresContent();
+        } catch (error) {
+            console.error('Error toggling wishlist:', error);
+        }
+    }
+
+    async function removeWishlist(storeId) {
+        try {
+            const response = await fetch(`/wishlist/remove/${storeId}/` , {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json',
+                },
+            });
             await refreshStoresContent();
         } catch (error) {
             console.error('Error toggling wishlist:', error);
@@ -140,10 +158,19 @@
     }
 
     function attachWishlistEventListeners() {
+        document.querySelectorAll('.wishlist-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const storeId = this.getAttribute('data-store-id');
+                removeWishlist(storeId);
+            });
+        });
+    }
+
+    function attachWishlistEventListeners2() {
         document.querySelectorAll('.wishlist-btn2').forEach(button => {
             button.addEventListener('click', function () {
                 const storeId = this.getAttribute('data-store-id');
-                toggleWishlist(storeId);
+                addWishlist(storeId);
             });
         });
     }
