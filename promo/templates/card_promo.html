@@ -1,0 +1,20 @@
+<div class="promo-card bg-white p-4 rounded shadow">
+    <h3 class="text-xl font-semibold">{{ promo.title }}</h3>
+    <p><span>Deskripsi:</span> {{ promo.description }}</p>
+    <p><span>Diskon:</span> {{ promo.discount_percentage }}%</p>
+    <p><span>Kode Promo:</span> {{ promo.promo_code }}</p>
+    <p><span>Tanggal Mulai:</span> {{ promo.start_date|date:"Y-m-d" }}</p>
+    <p><span>Tanggal Berakhir:</span> {{ promo.end_date|date:"Y-m-d" }}</p>
+    
+    {% if user_role == 2 %}  <!-- Check if the user is a contributor -->
+    <div class="promo-actions mt-4">
+        <a href="{% url 'promo:edit_promo' promo.id %}">
+            <button class="promo-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Edit</button>
+        </a>
+        
+        <a href="{% url 'promo:delete_promo' promo.id %}">
+            <button class="promo-button bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Delete</button>
+        </a>
+    </div>
+    {% endif %}
+</div>

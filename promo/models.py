@@ -28,3 +28,15 @@ class RedeemedPromo(models.Model):
     promo = models.ForeignKey(Promo, on_delete=models.CASCADE)
     redeem_date = models.DateTimeField(auto_now_add=True)
 
+class HistoryPromo(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    promo_code = models.CharField(max_length=100)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+

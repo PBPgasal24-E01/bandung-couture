@@ -17,26 +17,27 @@
     </div>
 
     <div class="bg-white mt-6 rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold mb-4">Riwayat Promo yang Sudah Kamu Buat</h2>
+        <h2 class="text-2xl font-bold mb-4">Riwayat Promo</h2>
         <ul>
-            {% for promo in user_promos %}
-                <li class="border-b border-gray-300 py-2 {% if promo.end_date < current_time %}bg-gray-200{% else %}bg-white{% endif %}">
-                    <div class="flex justify-between">
-                        <div>
-                            <p class="font-semibold">{{ promo.title }}</p>
-                            <p class="text-sm text-gray-600">{{ promo.description }}</p>
-                            <p class="text-sm text-gray-600">Diskon: {{ promo.discount_percentage }}%</p>
-                            <p class="text-sm text-gray-600">Kode Promo: {{ promo.promo_code }}</p>
-                            <p class="text-sm {% if promo.end_date < current_time %}text-red-500{% else %}text-gray-800{% endif %}">
-                                Valid Hingga: {{ promo.end_date|date:"d M Y" }}
-                            </p>
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="{% url 'promo:update_promo' promo.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Edit</a>
-                            <a href="{% url 'promo:delete_promo' promo.id %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Delete</a>
-                        </div>
-                    </div>
-                </li>
+            {% for history in user_history %}
+            <li class="border-b border-gray-300 py-2">
+                <div>
+                    <p class="font-semibold">{{ history.title }}</p>
+                    <p class="text-sm text-gray-600">{{ history.description }}</p>
+                    <p class="text-sm text-gray-600">Diskon: {{ history.discount_percentage }}%</p>
+                    <p class="text-sm text-gray-600">Kode Promo: {{ history.promo_code }}</p>
+                    <p class="text-sm text-gray-600">Tanggal Mulai: {{ history.start_date|date:"d M Y" }}</p>
+                    <p class="text-sm text-gray-600">Tanggal Berakhir: {{ history.end_date|date:"d M Y" }}</p>
+                    <p class="text-sm text-gray-600">Dibuat Pada: {{ history.created_at|date:"d M Y H:i" }}</p>
+                <div class="flex space-x-2">
+                    <form action="{% url 'promo:delete_history' history.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </li>
             {% empty %}
                 <li class="text-center text-gray-500">Kamu belum membuat promo apapun.</li>
             {% endfor %}

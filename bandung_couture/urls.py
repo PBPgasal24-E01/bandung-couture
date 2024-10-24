@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from promo.views import show_promo
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),  # Mengarahkan ke URLs di aplikasi main
     path('account/', include('account.urls')),  # Mengarahkan ke URLs di aplikasi account
-    path('promo/', include('promo.urls', namespace='showpromo')),  # Include URL dari aplikasi promo
+    path('promo/', include('promo.urls', namespace='promo')),  # Include URL dari aplikasi promo
     path('stores/', include('stores.urls', namespace='stores')),
     path('forum/', include('forum.urls')),
 ]
