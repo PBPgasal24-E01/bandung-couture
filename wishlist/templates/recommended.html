@@ -1,0 +1,44 @@
+{% load static %}
+
+{% if recommended_stores %}
+    <div class="grid grid-cols-2 mt-10">
+        {% for recommended_store_item in recommended_stores %}
+            <div class="h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">
+                <div class="img-section h-full w-40 flex justify-center items-center flex-shrink-0">
+                    <img class="recommend-images w-[90%] h-[90]">
+                </div>
+                <div class="m-2 text-section flex flex-col flex-grow">
+                    <div class="h-[30%] overflow-hidden">
+                        <h1 class="text-3xl">{{ recommended_store_item.brand }}</h1>
+                    </div>
+                    <div class="h-[25%] overflow-hidden">
+                        <p class="text-xs">{{ recommended_store_item.description }}</p>
+                    </div>
+                    <div class="h-[20%] overflow-hidden">
+                        <p class="text-s">{{ recommended_store_item.address }}</p>
+                    </div>
+
+                    <div class="flex h-[25%] overflow-hidden">
+                        {% for category in recommended_store_item.categories.all %}
+                            <div class="bg-black text-white w-[23%] mr-[2.2%] rounded flex flex-shrink-0 justify-center items-center">
+                                <p>{{ category.name }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if user.role == 1 %}
+                    <div class="wishlist-section  mt-auto flex justify-end">
+                        <button data-store-id="{{ recommended_store_item.id }}" class="wishlist-btn2 add bg-green-500 text-white py-1 px-2 rounded">
+                            Add to Wishlist
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center justify-center mt-10">
+        <img src="{% static 'images/sad-face.png' %}" alt="Sad Face" class="h-1/2">
+        <h3 class="text-lg">No Store in Your Recommended Stores</h3>
+    </div>
+{% endif %}

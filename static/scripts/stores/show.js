@@ -6,6 +6,8 @@ const rightButton = document.querySelector('.right-button');
 
 const carouselItemsCount = document.querySelectorAll('.carousel-item').length;
 
+var lastCarouselClicked = null;
+
 if(carouselItemsCount <= 4){
     rightButton.classList.add('invisible')
 }
@@ -43,6 +45,12 @@ document.querySelectorAll('.carousel-item').forEach((item) => {
     index = ++index % 5
 
     item.addEventListener('click', () => {
+        if (lastCarouselClicked != null) {
+            lastCarouselClicked.classList.replace('translate-y-4', 'translate-y-0');
+        }
+        item.classList.remove('translate-y-0');
+        item.classList.add('translate-y-4');
+        lastCarouselClicked = item;
         refreshStoresContent(item.getAttribute('data-category'));
     });
 });

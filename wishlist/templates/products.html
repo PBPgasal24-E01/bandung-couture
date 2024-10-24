@@ -1,0 +1,37 @@
+{% load static %}
+
+{% if wishlists %}
+    <div class="grid grid-cols-2 mt-10">
+        {% for wishlist_item in wishlists %}
+            <div class="h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">
+                <div class="img-section h-full w-40 flex justify-center items-center flex-shrink-0">
+                    <img class="store-images w-[90%] h-[90]">
+                </div>
+                <div class="m-2 text-section flex flex-col flex-grow">
+                    <div class="h-[30%] overflow-hidden">
+                        <h1 class="text-3xl">{{ wishlist_item.store.brand }}</h1>
+                    </div>
+                    <div class="h-[25%] overflow-hidden">
+                        <p class="text-xs">{{ wishlist_item.store.description }}</p>
+                    </div>
+                    <div class="h-[20%] overflow-hidden">
+                        <p class="text-s">{{ wishlist_item.store.address }}</p>
+                    </div>
+
+                    <div class="flex h-[25%] overflow-hidden">
+                        {% for category in wishlist_item.store.categories.all %}
+                            <div class="bg-black text-white w-[23%] mr-[2.2%] rounded flex flex-shrink-0 justify-center items-center">
+                                <p>{{ category.name }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center justify-center mt-10">
+        <img src="{% static 'images/sad-face.png' %}" alt="Sad Face" class="h-1/2">
+        <h3 class="text-lg">No Store in Your Wishlist on Recent Category</h3>
+    </div>
+{% endif %}

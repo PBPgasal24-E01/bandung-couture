@@ -48,6 +48,45 @@ def add(request):
         return JsonResponse({'message': 'SUCCESS'}, status=200)
     
     return JsonResponse({'message': 'NOT SUCCESS'}, status=400)
+
+@require_POST
+def edit(request, pk):
+
+    stores = Store.objects.filter(pk=pk, user=request.user)
+
+    if not stores:
+        return HttpResponseBadRequest()
+    
+    store = stores[0]
+
+    form = StoreForm(request.POST, instance=store)
+
+    if form.is_valid():
+        category_pks = request.POST.getlist('categories')
+        for category_pk in category_pks:
+            category = Category.objects.get(pk=category_pk)
+            store.categories.add(category)
+
+        #resave to update the changes in db
+        store.save()
+
+        return JsonResponse({'message': 'SUCCESS'}, status=200)
+    
+    return JsonResponse({'message': 'NOT SUCCESS'}, status=400)
+
+
+@require_POST
+def delete(request, pk):
+
+    stores = Store.objects.filter(pk=pk, user=request.user)
+
+    #if no store found with specified primary key or requesting user is not the owner of the store
+    if not stores:
+        return JsonResponse({'message': 'NOT SUCCESS'}, status=400)
+    
+    stores[0].delete()
+    return JsonResponse({'message': 'SUCCESS'}, status=200)
+    
     
 @login_required(login_url='/account/login')
 def deliver_all_stores_content_component(request):
@@ -67,6 +106,7 @@ def deliver_all_stores_content_component(request):
 
     return render(request, 'stores-components/stores-content.html', {
         'stores': stores,
+        'edit': False,
         'wishlist_items': wishlist_items
     })
 
@@ -78,4 +118,23 @@ def deliver_own_stores_content_component(request):
 
     return render(request, 'stores-components/stores-content.html', {
         'stores': stores,
+        'edit': True,
     })
+
+@require_GET
+def deliver_store_form(request, pk=None):
+
+    #require to be authenticated as contributor
+    if not (request.user.is_authenticated and request.user.role == 2):
+        return HttpResponseRedirect(reverse('account:login') + f'?next={request.get_full_path()}')
+
+    if pk == None:
+        form = StoreForm()
+    else:
+        stores = Store.objects.filter(pk=pk, user=request.user)
+        if not stores:
+            return HttpResponseBadRequest()
+        
+        form = StoreForm(instance=stores[0])
+
+    return HttpResponse(form)
