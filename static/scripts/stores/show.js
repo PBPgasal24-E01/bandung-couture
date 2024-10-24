@@ -81,8 +81,6 @@ async function toggleWishlist(storeId, button) {
         });
 
         const data = await response.json();
-        console.log('Response from toggle:', data);
-
         if (isAdding) {
             button.innerText = 'Remove from Wishlist';
             button.classList.remove('add');

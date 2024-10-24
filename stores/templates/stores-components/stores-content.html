@@ -25,12 +25,17 @@
                             </div>
                         {% endfor %}
                     </div>
+                    {% if user.role == 1 %}
                     <div class="wishlist-section">
-                        <button data-store-id="{{ store.id }}" class="wishlist-btn add bg-green-500 text-white py-1 px-2 rounded">
-                            Add to Wishlist
+                        <button data-store-id="{{ store.id }}" class="wishlist-btn {% if store.id in wishlist_items %}remove bg-red-500{% else %}add bg-green-500{% endif %} text-white py-1 px-2 rounded">
+                            {% if store.id in wishlist_items %}
+                                Remove from Wishlist
+                            {% else %}
+                                Add to Wishlist
+                            {% endif %}
                         </button>
                     </div>
-                    
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

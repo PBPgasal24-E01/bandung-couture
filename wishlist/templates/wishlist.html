@@ -1,7 +1,28 @@
+{% extends 'base.html' %}
 {% load static %}
 
+{% block content %}
+{% include 'components/navigation-bar.html' %}
+<!-- Category Filter Navigation -->
+<div class="bg-gray-200 py-20">
+    <h1 class="text-center text-5xl font-bold font-serif">WISHLIST CATEGORIES</h1>
+    <div class="carousel-container flex items-center justify-center mt-10">
+        <div class="carousel-track w-[90%] h-[90%] overflow-hidden">
+            <div class="carousel-items flex flex-wrap justify-center items-center py-2 transition-transform duration-300"> <!-- Change justify-start to justify-center -->
+                <a href="{% url 'wishlist:filter' 'all' %}" class="bg-white text-gray-700 py-3 px-5 rounded hover:bg-gray-300 m-2 min-w-[100px] flex items-center justify-center">All</a>
+                {% for category in categories %}
+                <a href="{% url 'wishlist:filter' category.id %}" class="bg-white text-gray-700 py-3 px-5 rounded hover:bg-gray-300 m-2 min-w-[100px] flex items-center justify-center">{{ category.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="toggle-button w-0 h-0 border-t-[24px] border-b-[24px] border-l-[16px] border-transparent border-l-black hover:border-l-gray-700 cursor-pointer" id="toggleButton"></div>
+    </div>
+</div>
+
+<!-- src="{% static 'scripts/stores/wishlist.js' %}" -->
+<h1 class="text-center text-5xl font-bold font-serif mt-10">BRANDS</h1>
 {% if wishlists %}
-    <div class="grid grid-cols-2">
+    <div class="grid grid-cols-2 mt-10">
         {% for wishlist_item in wishlists %}
             <div class="h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">
                 <div class="img-section h-full w-40 flex justify-center items-center flex-shrink-0">
@@ -30,8 +51,110 @@
         {% endfor %}
     </div>
 {% else %}
-    <div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center justify-center">
+    <div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center justify-center mt-10">
         <img src="{% static 'images/sad-face.png' %}" alt="Sad Face" class="h-1/2">
-        <h3 class="text-lg">No Store in Your Wishlist</h3>
+        <h3 class="text-lg">No Store in Your Wishlist on Recent Category</h3>
     </div>
 {% endif %}
+
+<h1 class="text-center text-5xl font-bold font-serif mt-10">RECOMMENDATIONS</h1>
+
+{% if recommended_stores %}
+    <div class="grid grid-cols-2 mt-10">
+        {% for store in recommended_stores %}
+            <div class="h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">
+                <div class="img-section h-full w-40 flex justify-center items-center flex-shrink-0">
+                    <img class="store-image w-[90%] h-[90%]" src="{% static 'images/store-placeholder.png' %}" alt="{{ store.brand }}">
+                </div>
+                <div class="m-2 text-section flex flex-col flex-grow">
+                    <div class="h-[30%] overflow-hidden">
+                        <h1 class="text-3xl">{{ store.brand }}</h1>
+                    </div>
+                    <div class="h-[25%] overflow-hidden">
+                        <p class="text-xs">{{ store.description }}</p>
+                    </div>
+                    <div class="h-[20%] overflow-hidden">
+                        <p class="text-s">{{ store.address }}</p>
+                    </div>
+
+                    <div class="flex h-[25%] overflow-hidden">
+                        {% for category in store.categories.all %}
+                            <div class="bg-black text-white w-[23%] mr-[2.2%] rounded flex flex-shrink-0 justify-center items-center">
+                                <p>{{ category.name }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center mt-10 justify-center">
+        <img src="{% static 'images/sad-face.png' %}" alt="Sad Face" class="h-1/2">
+        <h3 class="text-lg">No Recommendations Available</h3>
+    </div>
+{% endif %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const categoriesContainer = document.querySelector('.carousel-items');
+        const toggleButton = document.getElementById('toggleButton');
+        const carouselContainer = document.querySelector('.carousel-container'); // Select the carousel container
+        const categories = Array.from(categoriesContainer.children); // Convert HTMLCollection to Array
+        const initialVisibleCount = 5; // Number of categories to show initially
+        let isExpanded = false; // State to track if the view is expanded
+    
+        // Check local storage for expanded state
+        const expandedState = localStorage.getItem('categoriesExpanded');
+        if (expandedState === 'true') {
+            isExpanded = true; // Set state based on local storage
+            categories.forEach(category => {
+                category.style.display = 'flex'; // Show all categories
+            });
+            carouselContainer.classList.add('mt-20'); // Set margin to mt-20
+        } else {
+            // Show only initial categories if not expanded
+            showInitialCategories();
+        }
+    
+        // Function to show only the first 'n' categories
+        function showInitialCategories() {
+            categories.forEach((category, index) => {
+                category.style.display = (index < initialVisibleCount) ? 'flex' : 'none';
+            });
+        }
+    
+        // Function to toggle categories display
+        function toggleCategories() {
+            console.log("Toggle button clicked. Current state:", isExpanded);
+            if (isExpanded) {
+                console.log("Collapsing categories...");
+                // Collapse view: show only initial categories
+                categories.forEach((category, index) => {
+                    category.style.display = (index < initialVisibleCount) ? 'flex' : 'none';
+                });
+                carouselContainer.classList.remove('mt-20'); // Remove mt-20
+                carouselContainer.classList.add('mt-10'); // Add mt-10
+                toggleButton.style.borderLeftColor = 'black'; // Change arrow color (optional)
+                localStorage.setItem('categoriesExpanded', 'false'); // Save state to local storage
+            } else {
+                console.log("Expanding categories...");
+                // Expand view: show all categories
+                categories.forEach(category => {
+                    category.style.display = 'flex';
+                });
+                carouselContainer.classList.remove('mt-10'); // Remove mt-10
+                carouselContainer.classList.add('mt-20'); // Add mt-20
+                toggleButton.style.borderLeftColor = 'gray'; // Change arrow color (optional)
+                localStorage.setItem('categoriesExpanded', 'true'); // Save state to local storage
+            }
+            isExpanded = !isExpanded; // Toggle the state
+        }
+    
+        // Add event listener to the toggle button
+        toggleButton.addEventListener('click', toggleCategories);
+    });
+    
+    </script>
+    
+{% endblock %}
