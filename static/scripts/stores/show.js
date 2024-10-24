@@ -59,6 +59,7 @@ async function refreshStoresContent(category = null) {
     var response = await fetch(url);
     var text = await response.text();
     document.querySelector('.stores-content').innerHTML = text;
+    attachWishlistEventListeners();
 
     var index = 0;
     document.querySelectorAll('.store-image').forEach((image) => {
@@ -66,3 +67,66 @@ async function refreshStoresContent(category = null) {
         image.setAttribute('src', `/static/images/store-default-${(index++)}.jpg`);
     });
 }
+
+async function toggleWishlist(storeId, button) {
+    const isAdding = button.classList.contains('add'); // Check if it's currently adding
+
+    try {
+        const response = await fetch(isAdding ? `/wishlist/add/${storeId}/` : `/wishlist/remove/${storeId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const data = await response.json();
+        console.log('Response from toggle:', data);
+
+        if (isAdding) {
+            button.innerText = 'Remove from Wishlist';
+            button.classList.remove('add');
+            button.classList.remove('bg-green-500');
+            button.classList.add('remove', 'bg-red-500');
+        } else {
+            button.innerText = 'Add to Wishlist';
+            button.classList.remove('remove');
+            button.classList.remove('bg-red-500');
+            button.classList.add('add', 'bg-green-500');
+        }
+           
+    } catch (error) {
+        console.error('Error toggling wishlist:', error);
+    }
+}
+
+// Attach event listeners to dynamically loaded buttons
+function attachWishlistEventListeners() {
+    document.querySelectorAll('.wishlist-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const storeId = this.getAttribute('data-store-id');
+            toggleWishlist(storeId, this); // Call the toggle function
+        });
+    });
+}
+
+
+
+// Get CSRF token helper function
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Initially populate the stores content container with all stores
+refreshStoresContent();
