@@ -38,7 +38,6 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "raihan-akbar-bandungcouture.pbp.cs.u
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +48,7 @@ INSTALLED_APPS = [
     'account',
     'main',
     'stores',
+    'testimony'
 ]
 
 MIDDLEWARE = [

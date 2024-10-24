@@ -12,3 +12,4 @@ urlpatterns=[
     path('deliver-all-stores-content-component', deliver_all_stores_content_component, name='deliver-all-stores-content-component'),
     path('deliver-own-stores-content-component', deliver_own_stores_content_component, name='deliver-own-stores-content-component')
 ]
+

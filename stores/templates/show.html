@@ -2,42 +2,52 @@
 {% load static %}
 
 {% block content %}
-    {% include 'components/navigation-bar.html' %}
-    <div class="carousel-container h-[400px] bg-gray-200 flex items-center justify-center">
-        <div class="left-button w-0 h-0 border-t-[48px] border-b-[48px] border-r-[32px] border-transparent border-r-black hover:border-r-gray-700 cursor-pointer invisible"></div>
-        <div class="carousel-track w-[90%] h-[90%] overflow-hidden">
-            <div class="carousel-items h-full flex transition-transform duration-300">
-                <div data-category="All" class="carousel-item flex-shrink-0 w-[24%] h-[96%] bg-cover bg-center bg-no-repeat ml-[0.8%] border-gray-200 border-2 border-solid box-border cursor-pointer hover:translate-y-[4%] transition-transform duration-200 relative">
-                    <div class="absolute inset-0 flex items-center justify-center text-black text-3xl font-bold z-10 overflow-hidden">
-                        All
-                    </div>
+{% include 'components/navigation-bar.html' %}
+<div class="carousel-container h-[400px] bg-gray-200 flex items-center justify-center">
+    <div
+        class="left-button w-0 h-0 border-t-[48px] border-b-[48px] border-r-[32px] border-transparent border-r-black hover:border-r-gray-700 cursor-pointer invisible">
+    </div>
+    <div class="carousel-track w-[90%] h-[90%] overflow-hidden">
+        <div class="carousel-items h-full flex transition-transform duration-300">
+            <div data-category="All"
+                class="carousel-item flex-shrink-0 w-[24%] h-[96%] bg-cover bg-center bg-no-repeat ml-[0.8%] border-gray-200 border-2 border-solid box-border cursor-pointer hover:translate-y-[4%] transition-transform duration-200 relative">
+                <div
+                    class="absolute inset-0 flex items-center justify-center text-black text-3xl font-bold z-10 overflow-hidden">
+                    All
                 </div>
-                {% for category in categories %}
-                    <div data-category="{{ category.name }}" class="carousel-item flex-shrink-0 w-[24%] h-[96%] bg-cover bg-center bg-no-repeat ml-[0.8%] border-gray-200 border-2 border-solid box-border cursor-pointer hover:translate-y-[4%] transition-transform duration-200 relative">
-                        <div class="absolute inset-0 flex items-center justify-center text-black text-3xl font-bold z-10 overflow-hidden">
-                            {{ category.name }}
-                        </div>
-                    </div>
-                {% endfor %}
             </div>
+            {% for category in categories %}
+            <div data-category="{{ category.name }}"
+                class="carousel-item flex-shrink-0 w-[24%] h-[96%] bg-cover bg-center bg-no-repeat ml-[0.8%] border-gray-200 border-2 border-solid box-border cursor-pointer hover:translate-y-[4%] transition-transform duration-200 relative">
+                <div
+                    class="absolute inset-0 flex items-center justify-center text-black text-3xl font-bold z-10 overflow-hidden">
+                    {{ category.name }}
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        <div class="right-button w-0 h-0 border-t-[48px] border-b-[48px] border-l-[32px] border-transparent border-l-black hover:border-l-gray-700 cursor-pointer"></div>
     </div>
+    <div
+        class="right-button w-0 h-0 border-t-[48px] border-b-[48px] border-l-[32px] border-transparent border-l-black hover:border-l-gray-700 cursor-pointer">
+    </div>
+</div>
 
-    {% if user.role == 2 %} <!--If the user is contributor-->
-        <div class="control-panel flex justify-evenly items-center rounded bg-gray-200 h-20 mt-4">
-            <a href="{% url 'stores:show-own' %}" class="w-[10%]"><div class="h-12 bg-black hover:bg-gray-800 text-white rounded flex justify-center items-center">My Products</div></a>
+{% if user.role == 2 %} <!--If the user is contributor-->
+<div class="control-panel flex justify-evenly items-center rounded bg-gray-200 h-20 mt-4">
+    <a href="{% url 'stores:show-own' %}" class="w-[10%]">
+        <div class="h-12 bg-black hover:bg-gray-800 text-white rounded flex justify-center items-center">My Products
         </div>
-    {% endif %}
-    
-    <div class="flex flex-col items-center my-4">
-        <h1 class="text-3xl font-bold">Stores</h1>
-        <h2 class="text-2xl">Category: <span class="category-title">All</span></h2>
-    </div>
-    <div class="stores-content">
-        <!--Asynchronously insert stores here-->   
-    </div>
+    </a>
+</div>
+{% endif %}
 
-    <script src="{% static 'scripts/stores/show.js' %}"></script>
+<div class="flex flex-col items-center my-4">
+    <h1 class="text-3xl font-bold">Stores</h1>
+    <h2 class="text-2xl">Category: <span class="category-title">All</span></h2>
+</div>
+<div class="stores-content">
+    <!--Asynchronously insert stores here-->
+</div>
+
+<script src="{% static 'scripts/stores/show.js' %}"></script>
 {% endblock %}
-

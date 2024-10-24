@@ -11,9 +11,7 @@ class Category(models.Model):
         return self.name
 
 class Store(models.Model):
-
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-
     brand = models.CharField(max_length=31)
     description = models.TextField(null=True)
     categories = models.ManyToManyField(Category)

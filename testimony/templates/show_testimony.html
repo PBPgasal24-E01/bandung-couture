@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="relative">
+    <div id="header" class="fixed w-screen h-screen bg-gray-200 bg-opacity-40 z-10 hidden"></div>
+    {% include 'components/navigation-bar.html' %}
+    <div class="relative p-10 space-y-10 z-0">
+        <div class="text-3xl font-bold">{{store.brand}}</div>
+        <div id="content" class="flex-col space-y-5">
+        </div>
+        <button id="handleAdd"
+            class="bg-blue-700 text-white rounded-xl border border-1 p-3 shadow-lg hover:scale-105 ">Add
+            Testimony
+        </button>
+    </div>
+</div>
+
+<div id="add-testimony"
+    class="hidden fixed left-1/2 transform -translate-x-1/2 p-6 border z-30 bg-white border shadow-lg rounded-xl top-40 w-1/4 space-y-10">
+    <h1 class="font-bold text-center text-2xl">Add Testimony</h1>
+    <div class="flex flex-col space-y-8">
+        <form id="add_form">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="testimony">Testimony</label>
+                <input type="text" id="testimony" name="testimony"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700"
+                    placeholder="Enter your testimony" required>
+            </div>
+            <div>
+                <label for="rating">Rating</label>
+                <input type="number" id="rating" name="rating" min=0 max=5
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700"
+                    placeholder="Enter your rating" required>
+            </div>
+            <div class="hidden">
+                <label for="store_id"></label>
+                <input type="text" id="store_id" name="store_id"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700"
+                    value="{{store.pk}}">
+            </div>
+        </form>
+        <button id="handleSubmit" form="add_form"
+            class="w-full bg-blue-700 p-2 text-white rounded-xl font-bold hover:scale-95">Submit</button>
+    </div>
+</div>
+
+<script>
+    const root = document.getElementById("header")
+    const add = document.getElementById("add-testimony")
+    const btnAdd = document.getElementById("handleAdd")
+    const btnSubmit = document.getElementById("handleSubmit")
+    const form = document.getElementById("add_form")
+    const content = document.getElementById("content")
+
+
+    window.onclick = function (event) {
+        console.log(1)
+        if (event.target === root) {
+            add.classList.add('hidden')
+            root.classList.add('hidden')
+        }
+    }
+
+    async function getTestimonies() {
+        console.log("Getting pressed")
+        return fetch("{% url 'testimony:show_testimony' store.pk %}").then((res) => res.json())
+    }
+
+    async function refresh() {
+        const testimonies = await getTestimonies();
+        console.log(testimonies)
+        let data = ""
+        if (!testimonies || testimonies.length == 0) {
+            data += `<div> There is no testimonies yet </div>`
+        }
+        else {
+            testimonies.map(testimony => {
+                data += `{% include 'testimony_card.html' with user="${testimony.user}" rating="${testimony.rating}" testimony="${testimony.testimony}" %}`
+            })
+
+        }
+        document.getElementById("content").innerHTML = data
+    }
+
+    refresh()
+
+    function addTestimony() {
+        console.log(form)
+        fetch("{% url 'testimony:create_new_testimony' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector("#add_form"))
+        })
+            .then(response => {
+                if (response.ok) {
+                    refresh()
+                    form.reset();
+                }
+                else
+                    alert("Ikan tidak berhasil ditambahkan")
+                return
+            })
+
+        form.reset();
+        document.querySelector("[data-modal-toggle='crudModal']").click();
+
+        return false;
+
+    }
+
+    function toggle() {
+        if (root.classList.contains('hidden')) {
+            add.classList.remove('hidden')
+            root.classList.remove('hidden')
+        }
+        else {
+            add.classList.add('hidden')
+            root.classList.add('hidden')
+        }
+    }
+
+    btnAdd.onclick = function () {
+        toggle()
+    }
+
+    btnSubmit.addEventListener("click", (e) => {
+        e.preventDefault()
+        addTestimony()
+    })
+</script>
+
+{% endblock %}
