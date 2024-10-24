@@ -6,17 +6,9 @@
 {% endblock %}
 
 {% block content %}
-    <div class="add-modal hidden h-[90vh] w-[30%] my-[5vh] ml-[35%] bg-gray-300 rounded-lg flex flex-col items-center">
-        <form class="w-full">
-            <div class="w-full flex flex-col items-center">
-                <div class="h-10 bg-gray-700 w-full rounded-t-md flex justify-center items-center text-2xl text-white mb-2">Add Store</div>
-                {% for field in form %}
-                    <div class="w-[90%] flex">
-                        {{ field }}
-                    </div>
-                {% endfor %}
-                <button type="button" class="store-add-button text-white w-1/4 h-10 mt-2 rounded bg-gray-700 hover:bg-gray-600">Add Store</button>
-            </div>
+    <div class="modal hidden h-[90vh] w-[30%] my-[5vh] ml-[35%] bg-gray-300 rounded-lg flex flex-col items-center">
+        <form class="modal-form w-full">
+            
         </form>
     </div>
     
