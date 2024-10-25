@@ -14,8 +14,6 @@ class Promo(models.Model):
     promo_code = models.CharField(max_length=50, unique=True)
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
-    image = models.ImageField(upload_to='promo_images/', blank=True, null=True)  #
-    
 
     def __str__(self):
         return self.title
