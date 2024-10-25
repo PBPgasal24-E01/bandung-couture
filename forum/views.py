@@ -152,7 +152,6 @@ def show_root_json_filter_user(request) :
 
     return JsonResponse(forum_entries, safe=False)
 
-@csrf_exempt
 @require_POST
 @login_required(login_url='/account/login')
 def add_forum_entry_ajax(request):
@@ -182,7 +181,6 @@ def add_forum_entry_ajax(request):
         new_forum.save()
     return HttpResponse(b"CREATED", status=201)
 
-@csrf_exempt
 @require_POST
 @login_required(login_url='/account/login')
 def edit_forum(request):
@@ -199,7 +197,6 @@ def edit_forum(request):
     return HttpResponse(b"EDITED", status=201)
 
 
-@csrf_exempt
 @require_POST
 @login_required(login_url='/account/login')
 def delete_forum(request):
