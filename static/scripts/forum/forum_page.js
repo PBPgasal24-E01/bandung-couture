@@ -24,11 +24,11 @@
         let htmlString = "";
         let classNameString = "";
         if (forumEntries.length === 0) {
-          classNameString =
-            "flex flex-col items-center justify-center min-h-[24rem] p-6";
           htmlString = `
-                <div id="empty-card" class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-                    <p class="text-center text-gray-600 mt-4">Belum ada data forum. Silahkan buat forum.</p>
+                <div id="empty-card">
+                    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                        <p class="text-center text-gray-600 mt-4">Belum ada data forum. Silahkan buat forum.</p>
+                    </div>
                 </div>
             `;
         } else {
@@ -122,8 +122,10 @@
     }
     
     async function showForumForm() {
-        const card = document.getElementById(`forum_entry_form`);
-        if(card == null) return;
+        let card = document.getElementById(`forum_entry_form`);
+        if(card == null) {
+            card = document.getElementById('empty-card');
+        }
         const addForumHTML = `
             <div class="relative break-inside-avoid" id="add-forum">
                 <div class="px-10 py-6 bg-white rounded-lg shadow-md ">
@@ -142,14 +144,6 @@
             </div>
         `;
         card.outerHTML = addForumHTML;
-        
-        
-        const card2 = document.getElementById(`empty-card`);
-        if(card2 == null) return;
-        const htmlString = `
-            <div class="none"> </div>
-        `
-        card2.outerHTML = htmlString;
     }
     
     async function editForum(itemPk=null) {
