@@ -24,16 +24,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function toggleCategories() {
-        console.log("Toggle button clicked. Current state:", isExpanded);
         if (isExpanded) {
-            console.log("Collapsing categories...");
             showInitialCategories();
             carouselContainer.classList.remove('mt-20');
             carouselContainer.classList.add('mt-10');
             toggleButton.style.borderLeftColor = 'black';
             localStorage.setItem('categoriesExpanded', 'false');
         } else {
-            console.log("Expanding categories...");
             categories.forEach(category => {
                 category.style.display = 'flex';
             });

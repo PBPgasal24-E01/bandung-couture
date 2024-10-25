@@ -1,11 +1,11 @@
 {% load static %}
 
 {% if recommended_stores %}
-    <div class="grid grid-cols-2 mt-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10"> 
         {% for recommended_store_item in recommended_stores %}
-            <div class="h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">
+            <div class="shadow shadow-gray-500 hover:shadow-black h-40 bg-gray-200 flex rounded-lg overflow-hidden"> 
                 <div class="img-section h-full w-40 flex justify-center items-center flex-shrink-0">
-                    <img class="recommend-images w-[90%] h-[90]">
+                    <img class="recommend-images w-[90%] h-[90%] object-cover"> 
                 </div>
                 <div class="m-2 text-section flex flex-col flex-grow">
                     <div class="h-[30%] overflow-hidden">
@@ -25,8 +25,9 @@
                             </div>
                         {% endfor %}
                     </div>
+
                     {% if user.role == 1 %}
-                    <div class="wishlist-section  mt-auto flex justify-end">
+                    <div class="wishlist-section mt-auto flex justify-end">
                         <button data-store-id="{{ recommended_store_item.id }}" class="wishlist-btn2 add bg-green-500 text-white py-1 px-2 rounded">
                             Add to Wishlist
                         </button>
