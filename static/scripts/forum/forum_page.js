@@ -20,7 +20,7 @@
             }
         `;
         document.head.append(style);
-
+        
         let htmlString = "";
         let classNameString = "";
         if (forumEntries.length === 0) {

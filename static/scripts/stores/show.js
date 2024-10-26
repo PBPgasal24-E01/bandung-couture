@@ -68,7 +68,6 @@ async function refreshStoresContent(category = null) {
     var text = await response.text();
     document.querySelector('.stores-content').innerHTML = text;
     attachWishlistEventListeners();
-
     var index = 0;
     document.querySelectorAll('.store-image').forEach((image) => {
         index %= 8;
@@ -88,19 +87,11 @@ async function toggleWishlist(storeId, button) {
             },
         });
 
-        const data = await response.json();
-        if (isAdding) {
-            button.innerText = 'Remove from Wishlist';
-            button.classList.remove('add');
-            button.classList.remove('bg-green-500');
-            button.classList.add('remove', 'bg-red-500');
-        } else {
-            button.innerText = 'Add to Wishlist';
-            button.classList.remove('remove');
-            button.classList.remove('bg-red-500');
-            button.classList.add('add', 'bg-green-500');
-        }
-           
+        button.innerText = isAdding ? '- Remove' : '+ Wishlist';
+        button.classList.toggle('add');
+        button.classList.toggle('remove');
+        button.classList.toggle('bg-green-100', !isAdding);
+        button.classList.toggle('bg-red-500', isAdding);
     } catch (error) {
         console.error('Error toggling wishlist:', error);
     }
@@ -111,7 +102,7 @@ function attachWishlistEventListeners() {
     document.querySelectorAll('.wishlist-btn').forEach(button => {
         button.addEventListener('click', function() {
             const storeId = this.getAttribute('data-store-id');
-            toggleWishlist(storeId, this); // Call the toggle function
+            toggleWishlist(storeId, this); 
         });
     });
 }

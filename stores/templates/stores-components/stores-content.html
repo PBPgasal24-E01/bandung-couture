@@ -41,11 +41,11 @@
 
                     {% if user.role == 1 %}
                     <div class="wishlist-section mt-auto flex justify-end">
-                        <button data-store-id="{{ store.id }}" class="wishlist-btn {% if store.id in wishlist_items %}remove bg-red-500{% else %}add bg-green-500{% endif %} text-white py-1 px-2 rounded">
+                        <button data-store-id="{{ store.id }}" class="wishlist-btn {% if store.id in wishlist_items %}remove bg-red-500{% else %}add bg-green-500{% endif %} text-white py-1 px-2 rounded whitespace-nowrap">
                             {% if store.id in wishlist_items %}
-                                Remove from Wishlist
+                                - Remove 
                             {% else %}
-                                Add to Wishlist
+                                + Wishlist
                             {% endif %}
                         </button>
                     </div>
