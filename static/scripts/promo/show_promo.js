@@ -59,7 +59,16 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 var errors = xhr.responseJSON.errors || {};
-                alert('Error: ' + JSON.stringify(errors)); 
+                var errorMessagesDiv = $('#error-messages'); // Asumsi Anda sudah membuat div ini
+                errorMessagesDiv.empty(); // Kosongkan pesan sebelumnya
+
+                for (const [field, messages] of Object.entries(errors)) {
+                    messages.forEach(message => {
+                        errorMessagesDiv.append('<p>' + message + '</p>'); // Tambahkan pesan kesalahan
+                    });
+                }
+
+                errorMessagesDiv.show(); 
             }
         });
     });
