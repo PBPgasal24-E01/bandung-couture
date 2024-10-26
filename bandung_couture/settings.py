@@ -33,7 +33,7 @@ if DEBUG:
 else:
     STATIC_ROOT = BASE_DIR / 'static' # merujuk ke /static root project pada mode production
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "raihan-akbar-bandungcouture.pbp.cs.ui.ac.id/"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "raihan-akbar-bandungcouture.pbp.cs.ui.ac.id"]
 
 
 # Application definition
@@ -136,4 +136,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "account.User"
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://raihan-akbar-bandungcouture.pbp.cs.ui.ac.id/", "https://raihan-akbar-bandungcouture.pbp.cs.ui.ac.id/"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://raihan-akbar-bandungcouture.pbp.cs.ui.ac.id", "https://raihan-akbar-bandungcouture.pbp.cs.ui.ac.id"]
