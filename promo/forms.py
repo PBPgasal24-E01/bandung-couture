@@ -7,7 +7,7 @@ from django.utils import timezone
 class PromoEntryForm(ModelForm):
     class Meta:
         model = Promo
-        fields = ["title", "description", "discount_percentage", "start_date", "end_date", "promo_code", "is_active", "image"]
+        fields = ["title", "description", "discount_percentage", "start_date", "end_date", "promo_code", "is_active"]
     
     def clean(self):
         cleaned_data = super().clean()
@@ -22,3 +22,6 @@ class PromoEntryForm(ModelForm):
                 raise forms.ValidationError("Tanggal mulai tidak valid")
 
         return cleaned_data
+    
+
+    

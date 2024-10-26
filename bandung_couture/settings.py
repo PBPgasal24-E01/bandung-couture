@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'account',
     'stores',
     'promo',
-    'forum',
 ]
 
 MIDDLEWARE = [
