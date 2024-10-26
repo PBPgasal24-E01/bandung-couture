@@ -106,7 +106,7 @@ async function toggleWishlist(storeId, button) {
 
 // Attach event listeners to dynamically loaded buttons
 function attachWishlistEventListeners() {
-    document.querySelectorAll('.wishlist-btn').forEach(button => {
+    document.querySelectorAll('.wishlist-btn').forEach((button) => {
         button.addEventListener('click', function() {
             const storeId = this.getAttribute('data-store-id');
             toggleWishlist(storeId, this); 
