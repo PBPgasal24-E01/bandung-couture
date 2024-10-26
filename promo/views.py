@@ -1,80 +1,57 @@
-# @login_required(login_url='/account/login')
-# def show_promo(request):
-#     expired_promos = Promo.objects.filter(end_date__lt=timezone.now())
- 
-#     for promo in expired_promos:
-#         HistoryPromo.objects.create(
-#             title=promo.title,
-#             description=promo.description,
-#             discount_percentage=promo.discount_percentage,
-#             promo_code=promo.promo_code,
-#             start_date=promo.start_date,
-#             end_date=promo.end_date,
-#         )
-#         promo.delete()  
-
-#     promos = Promo.objects.all()
-#     filter_option = request.GET.get('filter', '')
-#     if filter_option == 'highest_discount':
-#         promos = promos.order_by('-discount_percentage')
-#     elif filter_option == 'nearest_time':
-#         promos = promos.order_by('end_date')
-
-#     user_role = request.user.role if request.user.is_authenticated else None
-
-#     # If JSON is requested
-#     if request.headers.get('Content-Type') == 'application/json':
-#         promo_list = list(promos.values('id', 'title', 'discount_percentage', 'end_date'))
-#         return JsonResponse({'status': True, 'promos': promo_list}, status=200)
-
-#     # Otherwise, render HTML template
-#     return render(request, 'show_promo.html', {
-#         'promos': promos,
-#         'user_role': user_role,
-#         'filter': filter_option,
-#     })
-
-
-
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-
 from .models import Promo
 from .forms import PromoEntryForm
 
 
 @login_required(login_url='/account/login')
 def show_promo(request, id=None):
-    if id is not None:  # If an ID is provided, show the specific promo
+    if id is not None: 
         promo = get_object_or_404(Promo, pk=id)
         return render(request, 'show_promo.html', {'promo': promo})
 
     user_role = request.user.role if request.user.is_authenticated else None 
 
-    if user_role == 1:  # Visitor
-        # Fetch all promos for visitors
+    if user_role == 1: 
         promos = Promo.objects.all()
-    elif user_role == 2:  # Contributor
-        # Fetch promos created by the logged-in user
+    elif user_role == 2:  
         promos = Promo.objects.filter(created_by=request.user)
     else:
-        promos = Promo.objects.none()  # No promos to show
-
-    # Prepare messages to display
-    success_message = request.session.pop('success_message', None)
-    error_message = request.session.pop('error_message', None)
-
+        promos = Promo.objects.none()
+        
     return render(request, 'show_promo.html', {
         'promos': promos,
         'user_role': user_role,
-        'success_message': success_message,
-        'error_message': error_message,
+   
     })
 
+@login_required(login_url='/account/login')
+def filter_promos(request):
+    filter_type = request.GET.get('filter', '')
+    promos = Promo.objects.all()  
+
+    if filter_type == 'highest-discount':
+        promos = promos.order_by('-discount_percentage') 
+    elif filter_type == 'nearest-end':
+        promos = promos.order_by('end_date')  
+
+    promo_list = [{
+        'id': promo.id,
+        'title': promo.title,
+        'description': promo.description,
+        'discount_percentage': promo.discount_percentage,
+        'promo_code': promo.promo_code,
+        'start_date': promo.start_date.strftime('%Y-%m-%d'),         
+        'end_date': promo.end_date.strftime('%Y-%m-%d'),  
+    } for promo in promos]
+
+    return JsonResponse({'promos': promo_list})
+
+@login_required(login_url='/account/login')
 @require_POST 
 @csrf_exempt
 def create_promo(request):
@@ -92,6 +69,8 @@ def create_promo(request):
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
    
+@login_required(login_url='/account/login')
+@require_POST
 @csrf_exempt
 def update_promo(request, id):
     promo = get_object_or_404(Promo, pk=id)
@@ -105,9 +84,10 @@ def update_promo(request, id):
             request.session['error_message'] = form.errors
             return JsonResponse({'success': False, 'errors': form.errors})
 
+@login_required(login_url='/account/login')
 def get_promo(request, id):
     if request.method == 'GET':
-        promo = get_object_or_404(Promo, pk=id)  # Ensure you're using the correct primary key
+        promo = get_object_or_404(Promo, pk=id)  
         data = {
             'id': promo.id,
             'title': promo.title,
@@ -119,6 +99,7 @@ def get_promo(request, id):
         }
         return JsonResponse(data)
 
+@login_required(login_url='/account/login')
 @csrf_exempt
 def delete_promo(request, id):
     promo = get_object_or_404(Promo, pk=id)

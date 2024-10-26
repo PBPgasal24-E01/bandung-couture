@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from .models import Promo
 from django import forms
 from django.utils import timezone
-
+from django.utils.html import strip_tags
 
 class PromoEntryForm(ModelForm):
     class Meta:
@@ -24,4 +24,27 @@ class PromoEntryForm(ModelForm):
         return cleaned_data
     
 
+    def clean_title(self):
+        title = self.cleaned_data.get("title")
+        return strip_tags(title)  
+
+    def clean_description(self):
+        description = self.cleaned_data.get("description")
+        return strip_tags(description)  
+
+    def clean_discount_percentage(self):
+        discount_percentage = self.cleaned_data.get("discount_percentage")
+        return discount_percentage 
+
+    def clean_promo_code(self):
+        promo_code = self.cleaned_data.get("promo_code")
+        return strip_tags(promo_code)  
+
+    def clean_start_date(self):
+        start_date = self.cleaned_data.get("start_date")
+        return start_date
+
+    def clean_end_date(self):
+        end_date = self.cleaned_data.get("end_date")
+        return end_date
     

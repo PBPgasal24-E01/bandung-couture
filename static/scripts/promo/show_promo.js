@@ -1,4 +1,51 @@
 $(document).ready(function() {
+    
+    $('#filter-discount').on('change', function() {
+        const filterValue = $(this).val();
+        filterPromos(filterValue);
+    });
+
+    function filterPromos(filter) {
+        $.ajax({
+            url: '/promo/filter/', 
+            type: 'GET',
+            data: { filter: filter }, 
+            success: function(data) {
+                updatePromoList(data.promos);
+            },
+            error: function(error) {
+                console.log('Error fetching filtered promos:', error);
+            }
+        });
+    }
+
+    function updatePromoList(promos) {
+        const promoListContainer = $('.promo-container'); 
+        promoListContainer.empty(); 
+
+        if (promos.length === 0) {
+            promoListContainer.append('<p class="text-center text-gray-700">Tidak ada promosi aktif saat ini.</p>');
+            return;
+        }
+
+        promos.forEach(promo => {
+            const endDate = new Date(promo.end_date);
+            const options = { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+            const formattedDate = endDate.toLocaleString('en-US', options);
+            promoListContainer.append(`
+                <div class="promo-card bg-white border border-gray-300 rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105" data-id="${promo.id}">
+                    <h2 class="text-xl font-semibold text-gray-800">${DOMPurify.sanitize(promo.title)}</h2>
+                    <p class="text-gray-600 mt-1">
+                        ${DOMPurify.sanitize(promo.description).slice(0, 30)}...
+                    </p>
+                    <p class="font-bold text-gray-800 mt-2">Diskon: <span class="text-green-600">${DOMPurify.sanitize(promo.discount_percentage)}%</span></p>
+                    <p class="font-bold text-gray-800">Kode Promo: <span class="bg-gray-200 border border-gray-400 rounded px-2 py-1 text-red-500 font-mono">${DOMPurify.sanitize(promo.promo_code)}</span></p>
+                    <p class="font-bold text-gray-800">Valid Hingga: <span class="text-gray-500">${formattedDate}</span></p>
+                    <button class="promo-detail-button text-blue-600 hover:underline" data-id="${promo.id}">Detail</button>
+                </div>
+            `);
+        });
+    }
 
     $(document).on('click', '.promo-detail-button', function() {
         const promoId = $(this).data('id'); 
@@ -9,14 +56,14 @@ $(document).ready(function() {
             success: function(data) {
                 console.log(data); 
                 
-                $('#promoDetailTitle').text(data.title);
+                $('#promoDetailTitle').text(DOMPurify.sanitize(data.title));
                 
                 const startDate = new Date(data.start_date).toLocaleDateString();
                 const endDate = new Date(data.end_date).toLocaleDateString();
                 
-                $('#promoDetailContent .promo-description').text(data.description);
-                $('#promoDetailContent .promo-code').text(data.promo_code);
-                $('#promoDetailContent .promo-discount').text(`${data.discount_percentage}%`);
+                $('#promoDetailContent .promo-description').text(DOMPurify.sanitize(data.description));
+                $('#promoDetailContent .promo-code').text(DOMPurify.sanitize(data.promo_code));
+                $('#promoDetailContent .promo-discount').text(`${DOMPurify.sanitize(data.discount_percentage)}%`);
                 $('#promoDetailContent .promo-dates').text(`${startDate} - ${endDate}`);
 
                 $('#promoDetailModal').removeClass('hidden');
@@ -38,11 +85,10 @@ $(document).ready(function() {
 
     $('#savePromoButton').on('click', function(e) {
         e.preventDefault();
-        var formData = $('#promoForm').serialize();
-        var promoId = $('#promo_id').val(); 
-
-        var url = promoId ? '/promo/update/' + promoId + '/' : '/promo/create/';
-
+        const formData = $('#promoForm').serialize();
+        const promoId = $('#promo_id').val();
+        const url = promoId ? '/promo/update/' + promoId + '/' : '/promo/create/';
+    
         $.ajax({
             type: 'POST',
             url: url,
@@ -52,29 +98,29 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.status === 'success' || response.success) {
-                    location.reload(); 
+                    location.reload(); // Refresh on success
                 } else {
-                    alert('Error: ' + JSON.stringify(response.errors)); 
+                    alert('Error: ' + JSON.stringify(response.errors));
                 }
             },
             error: function(xhr) {
-                var errors = xhr.responseJSON.errors || {};
-                var errorMessagesDiv = $('#error-messages'); // Asumsi Anda sudah membuat div ini
-                errorMessagesDiv.empty(); // Kosongkan pesan sebelumnya
+                const errors = xhr.responseJSON.errors || {};
+
+                $('.error-message').text('');
 
                 for (const [field, messages] of Object.entries(errors)) {
-                    messages.forEach(message => {
-                        errorMessagesDiv.append('<p>' + message + '</p>'); // Tambahkan pesan kesalahan
-                    });
+                    const inputField = $(`#${field}`);
+                    inputField.next('.error-message').text(DOMPurify.sanitize(messages.join(', ')));
                 }
-
-                errorMessagesDiv.show(); 
+    
+                $('#promoForm').show();
             }
         });
     });
-
+    
     $(document).on('click', '.edit-promo', function() {
         var promoId = $(this).data('id');
+
         $.ajax({
             type: 'GET',
             url: '/promo/get/' + promoId + '/',
@@ -91,6 +137,17 @@ $(document).ready(function() {
                 $('#savePromoButton').text('Update Promo'); 
             },
             error: function(xhr) {
+                const errors = xhr.responseJSON.errors || {};
+
+                $('.error-message').text('');
+
+                for (const [field, messages] of Object.entries(errors)) {
+                    const inputField = $(`#${field}`);
+                    if (inputField.length) {
+                        inputField.next('.error-message').text(DOMPurify.sanitize(messages.join(', ')));
+                    }
+                }
+
                 alert('Error fetching promo data: ' + xhr.responseText);
             }
         });
@@ -99,7 +156,6 @@ $(document).ready(function() {
     $(document).on('click', '.delete-promo', function() {
         var promoId = $(this).data('id');
 
-        // Use SweetAlert2 for a confirmation dialog
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -110,23 +166,20 @@ $(document).ready(function() {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Proceed with the AJAX call if confirmed
                 $.ajax({
                     url: '/promo/delete/' + promoId + '/',
                     method: 'POST',
                     data: { id: promoId },
                     success: function(response) {
-                        // Handle success (e.g., show a success message)
                         Swal.fire(
                             'Deleted!',
                             'Your promo has been deleted.',
                             'success'
                         ).then(() => {
-                            location.reload(); // Refresh the page
+                            location.reload(); 
                         });
                     },
                     error: function(xhr, status, error) {
-                        // Handle error (e.g., show an error message)
                         Swal.fire(
                             'Error!',
                             'There was a problem deleting the promo.',
@@ -144,9 +197,9 @@ $(document).ready(function() {
         $('#promo_id').val('');
         $('#promoForm')[0].reset(); 
         $('#savePromoButton').text('Save Promo'); 
+        $('.error-message').text('');
     });
 
-    
 });
 
 
