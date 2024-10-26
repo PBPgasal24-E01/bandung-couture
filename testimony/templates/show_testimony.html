@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="relative">
+    <div id="header" class="fixed w-screen h-screen bg-gray-200 bg-opacity-40 z-10 hidden"></div>
+    {% include 'components/navigation-bar.html' %}
+    <div class="relative p-10 space-y-10 z-0">
+        <div class="flex flex-row justify-between">
+            <div class="text-3xl font-bold">{{store.brand}}</div>
+            <div class="flex flex-col">
+                <div class="font-bold text-xl text-yellow-400" id="rating"></div>
+                <div>Rating</div>
+            </div>
+        </div>
+        <div id="content" class="flex-col space-y-5"></div>
+
+        {% if user.role == 1 %}
+        <button id="handleAdd"
+            class="bg-blue-700 text-white rounded-xl border border-1 p-3 shadow-lg hover:scale-105 ">Add
+            Testimony
+        </button>
+        {% else %}
+        <div class="hidden" id="handleAdd">
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div id="add-testimony"
+    class="hidden fixed left-1/2 transform -translate-x-1/2 p-6 border z-30 bg-white border shadow-lg rounded-xl top-40 md:w-1/2 lg:w-1/4 space-y-10">
+    <button id="close-button" class="absolute top-5 right-5">
+        <div
+            class="rounded-full border border-1 border-black hover:bg-black hover:text-white h-10 w-10 flex justify-center items-center">
+            X</div>
+    </button>
+    <h1 class="font-bold text-center text-2xl">
+        Add Testimony
+    </h1>
+    <div class="flex flex-col space-y-8">
+        <form id="add_form">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="testimony">Testimony</label>
+                <input type="text" id="testimony" name="testimony"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700"
+                    placeholder="Enter your testimony" required>
+            </div>
+            <div>
+                <label for="rating">Rating</label>
+                <input type="number" id="rating" name="rating" min="0" max="5"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700"
+                    placeholder="Enter your rating" required>
+            </div>
+            <div class="hidden">
+                <label for="store_id"></label>
+                <input type="text" id="store_id" name="store_id"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700"
+                    value="{{store.pk}}">
+            </div>
+        </form>
+        <button id="handleSubmit" form="add_form"
+            class="w-full bg-blue-700 p-2 text-white rounded-xl font-bold hover:scale-95">Submit</button>
+    </div>
+</div>
+<script>
+    const store = "{{store.pk}}"
+    const user = "{{user}}"
+</script>
+<script src="{% static 'scripts/testimony/show_testimony.js' %}"></script>
+
+{% endblock %}

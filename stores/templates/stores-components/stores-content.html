@@ -1,62 +1,77 @@
 {% load static %}
 
 {% if stores %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-        {% for store in stores %}
-            <div class="shadow shadow-gray-500 hover:shadow-black h-40 bg-gray-200 flex rounded-lg overflow-hidden"> 
-                <div class="img-section w-40 flex justify-center items-center flex-shrink-0">
-                    <img class="shadow-black shadow store-image w-[90%] h-[90%] object-cover"> 
-                </div>
-                <div class="m-2 text-section flex flex-col flex-grow">
-                    <div class="h-[30%] flex items-center"> 
-                        <div class="h-full w-3/4 overflow-hidden">
-                            <h1 class="text-3xl">{{ store.brand }}</h1>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+    {% for store in stores %}
+    <div class="shadow shadow-gray-500 hover:shadow-black h-40 bg-gray-200 flex rounded-lg overflow-hidden">
+        <div class="img-section w-40 flex justify-center items-center flex-shrink-0">
+            <img class="shadow-black shadow store-image w-[90%] h-[90%] object-cover">
+        </div>
+        <div class="m-2 text-section flex flex-col flex-grow">
+            <div class="h-[30%] flex items-center">
+                <div class="w-full flex flex-row">
+                    <div class="h-full w-3/4 overflow-hidden">
+                        <h1 class="text-3xl">{{ store.brand }}</h1>
+                    </div>
+                    <a href="{% url 'testimony:show_testimony_by_merchant' store.pk %}"
+                        class="w-1/4 flex justify-center items-end flex flex-col cursor-pointer">
+                        <div class="flex flex-row items-center justify-center gap-2">
+                            <img src="/static/icon/star.svg" class="w-10 h-10" alt="">
                         </div>
-                        {% if edit %}
-                            <button type="button" class="edit-store-button w-[11.5%] mr-[2%] h-full bg-gray-300 ring-[1.5px] ring-gray-400 hover:ring-1 rounded-sm" data-href="{% url 'stores:deliver-store-form' pk=store.pk %}" data-pk="{{ store.pk }}">
-                                <i class="fa-pen-to-square fa-lg fa-solid"></i>
-                            </button>
-                            <button type="button" class="delete-store-button w-[11.5%] h-full bg-gray-300 ring-[1.5px] ring-gray-400 hover:ring-1 rounded-sm" data-href="{% url 'stores:delete' pk=store.pk %}">
-                                <i class="fa-trash fa-lg fa-solid"></i>
-                            </button>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="h-[25%] overflow-hidden">
-                        <p class="text-xs">{{ store.description }}</p>
-                    </div>
-                    <div class="h-[20%] overflow-hidden">
-                        <p class="text-s">{{ store.address }}</p>
-                    </div>
-
-                    <div class="flex h-[25%] overflow-hidden">
-                        {% for category in store.categories.all %}
-                            <div class="bg-black text-white w-[23%] mr-[2.2%] rounded flex flex-shrink-0 items-center justify-center">
-                                <div class="w-[90%] h-full overflow-hidden whitespace-nowrap flex items-center text-sm">
-                                    {{ category.name }}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    {% if user.role == 1 %}
-                    <div class="wishlist-section mt-auto flex justify-end">
-                        <button data-store-id="{{ store.id }}" class="wishlist-btn {% if store.id in wishlist_items %}remove bg-red-500{% else %}add bg-green-500{% endif %} text-white py-1 px-2 rounded whitespace-nowrap">
-                            {% if store.id in wishlist_items %}
-                                - Remove 
-                            {% else %}
-                                + Wishlist
-                            {% endif %}
-                        </button>
-                    </div>
-                    {% endif %}
+                        <p>Testimony</p>
+                    </a>
                 </div>
+                {% if edit %}
+                <button type="button"
+                    class="edit-store-button w-[11.5%] mr-[2%] h-full bg-gray-300 ring-[1.5px] ring-gray-400 hover:ring-1 rounded-sm"
+                    data-href="{% url 'stores:deliver-store-form' pk=store.pk %}" data-pk="{{ store.pk }}">
+                    <i class="fa-pen-to-square fa-lg fa-solid"></i>
+                </button>
+                <button type="button"
+                    class="delete-store-button w-[11.5%] h-full bg-gray-300 ring-[1.5px] ring-gray-400 hover:ring-1 rounded-sm"
+                    data-href="{% url 'stores:delete' pk=store.pk %}">
+                    <i class="fa-trash fa-lg fa-solid"></i>
+                </button>
+                {% endif %}
             </div>
-        {% endfor %}
+
+            <div class="h-[25%] overflow-hidden">
+                <p class="text-xs">{{ store.description }}</p>
+            </div>
+            <div class="h-[20%] overflow-hidden">
+                <p class="text-s">{{ store.address }}</p>
+            </div>
+
+            <div class="flex h-[25%] overflow-hidden">
+                {% for category in store.categories.all %}
+                <div
+                    class="bg-black text-white w-[23%] mr-[2.2%] rounded flex flex-shrink-0 items-center justify-center">
+                    <div class="w-[90%] h-full overflow-hidden whitespace-nowrap flex items-center text-sm">
+                        {{ category.name }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if user.role == 1 %}
+            <div class="wishlist-section mt-auto flex justify-end">
+                <button data-store-id="{{ store.id }}"
+                    class="wishlist-btn {% if store.id in wishlist_items %}remove bg-red-500{% else %}add bg-green-500{% endif %} text-white py-1 px-2 rounded whitespace-nowrap">
+                    {% if store.id in wishlist_items %}
+                    - Remove
+                    {% else %}
+                    + Wishlist
+                    {% endif %}
+                </button>
+            </div>
+            {% endif %}
+        </div>
     </div>
+    {% endfor %}
+</div>
 {% else %}
-    <div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center justify-center">
-        <img src="{% static 'images/sad-face.png' %}" alt="Sad Face" class="h-1/2">
-        <h3 class="text-lg">No Store Exists</h3>
-    </div>
+<div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center justify-center">
+    <img src="{% static 'images/sad-face.png' %}" alt="Sad Face" class="h-1/2">
+    <h3 class="text-lg">No Store Exists</h3>
+</div>
 {% endif %}
