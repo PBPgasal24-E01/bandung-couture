@@ -8,37 +8,37 @@ const carouselItemsCount = document.querySelectorAll('.carousel-item').length;
 
 var lastCarouselClicked = null;
 
-if(carouselItemsCount <= 4){
+if (carouselItemsCount <= 4) {
     rightButton.classList.add('invisible')
 }
 
 let dx = 0;
 document.querySelector('.left-button').addEventListener('click', () => {
-    if(dx > 0){
+    if (dx > 0) {
         dx--;
         carouselItems.style.transform = `translateX(-${(dx * 24.8)}%)`
     }
-    if(dx == 0){
+    if (dx == 0) {
         leftButton.classList.add('invisible')
     }
-    if(dx == carouselItemsCount - 5){
+    if (dx == carouselItemsCount - 5) {
         rightButton.classList.remove('invisible');
     }
 });
 document.querySelector('.right-button').addEventListener('click', () => {
-    if(dx < carouselItemsCount - 4){
+    if (dx < carouselItemsCount - 4) {
         dx++;
         carouselItems.style.transform = `translateX(-${dx * 24.8}%)`
     }
-    if(dx == 1){
+    if (dx == 1) {
         leftButton.classList.remove('invisible')
     }
-    if(dx == carouselItemsCount - 4){
+    if (dx == carouselItemsCount - 4) {
         rightButton.classList.add('invisible');
     }
 });
 
-let index = 0 
+let index = 0
 document.querySelectorAll('.carousel-item').forEach((item) => {
     item.style.backgroundImage = `url('/static/images/category-default-${index}.jpg')`;
 
@@ -88,7 +88,7 @@ async function toggleWishlist(storeId, button) {
             },
         });
         const data = await response.json();
-        if (isAdding){
+        if (isAdding) {
             button.innerText = "- Remove";
             button.classList.remove('add');
             button.classList.remove('bg-green-500');
@@ -107,9 +107,9 @@ async function toggleWishlist(storeId, button) {
 // Attach event listeners to dynamically loaded buttons
 function attachWishlistEventListeners() {
     document.querySelectorAll('.wishlist-btn').forEach((button) => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const storeId = this.getAttribute('data-store-id');
-            toggleWishlist(storeId, this); 
+            toggleWishlist(storeId, this);
         });
     });
 }
