@@ -1,5 +1,47 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
     {% include 'components/navigation-bar.html' %}
+        <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-20">
+            <h2 class="mb-8 text-3xl font-bold md:text-5xl lg:mb-14"> Meet Bandung Couture </h2>
+            <p class="mb-8 max-w-lg text-sm text-gray-500 sm:text-base lg:mb-24"> Temukan keunikan dan kreativitas Bandung dalam satu genggaman dengan Bandung Couture – Aplikasi yang menghadirkan karya terbaik desainer lokal, dari gaya kasual hingga high-fashion, langsung untuk Anda. </p>
+            <div class="grid gap-10 lg:grid-cols-2 lg:gap-12">
+                <img src="{% static 'images/category-default-0.jpg' %}" alt="" class="inline-block h-full w-full rounded-2xl object-cover" />
+                <div class="flex flex-col gap-5 rounded-2xl border border-solid border-black p-10 sm:p-20">
+                    <h2 class="text-3xl font-bold md:text-5xl">Our Mission</h2>
+                    <p class="text-sm text-gray-500 sm:text-base"> 
+                        Menjadi jembatan antara para pencinta fashion dan desainer lokal Bandung, dengan menyediakan platform yang mempertemukan produk-produk fashion kreatif dan berkualitas. 
+                        
+                        <br/> 
+                        <br/> 
+                        Kami berkomitmen untuk mendukung perkembangan industri fashion Bandung dan memperluas akses masyarakat terhadap karya-karya unik desainer lokal, sehingga setiap orang dapat mengekspresikan gaya mereka dengan sentuhan khas Bandung.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <section>
+            <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-20"> 
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-3xl font-bold md:text-5xl"> Explorasi Fashion Bandung dengan mudah! </h2>
+                    <p class="mb-8 mt-4 max-w-lg text-base text-gray-500 md:mb-12 md:text-lg lg:mb-16"> Lihat keindahan fashion Bandung dalam satu aplikasi! </p>
+                </div>
+                <div class="grid gap-5 sm:grid-cols-2 md:grid-cols-3 md:gap-4 lg:gap-6">
+                    <div class="grid gap-6 rounded-md border border-solid border-gray-300 p-8 md:p-10">
+                        <img src="{% static 'images/explore-image.jpg' %}" alt="" class="inline-block h-16 w-16 object-cover rounded-full " />
+                        <h3 class="text-xl font-semibold">Explore</h3>
+                        <p class="text-sm text-gray-500"> Lihatlah Produk dan Brand lokal bandung, serta promo yang tersedia. </p>
+                    </div> 
+                    <div class="grid gap-6 rounded-md border border-solid border-gray-300 p-8 md:p-10">
+                        <img src="{% static 'images/wishlist-image.jpg' %}" alt="" class="inline-block h-16 w-16 object-cover rounded-full " />
+                        <h3 class="text-xl font-semibold">Wishlist</h3>
+                        <p class="text-sm text-gray-500"> Simpan Produk dan Brand sesuai keinginan anda untuk mempermudah menentukan tujuan Anda. </p>
+                    </div> 
+                    <div class="grid gap-6 rounded-md border border-solid border-gray-300 p-8 md:p-10">
+                        <img src="{% static 'images/chat-image.jpg' %}" alt="" class="inline-block h-16 w-16 object-cover rounded-full " />
+                        <h3 class="text-xl font-semibold">Ask</h3>
+                        <p class="text-sm text-gray-500"> Bingung? Tanyalah kepada pengguna dan kontributor lain. </p>
+                    </div>
+                </div>
+            </div>
+        </section>
 {% endblock %}
