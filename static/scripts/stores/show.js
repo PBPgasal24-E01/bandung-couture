@@ -73,6 +73,7 @@ async function refreshStoresContent(category = null) {
         index %= 8;
         image.setAttribute('src', `/static/images/store-default-${(index++)}.jpg`);
     });
+    console.log("halo")
 }
 
 async function toggleWishlist(storeId, button) {
@@ -86,12 +87,18 @@ async function toggleWishlist(storeId, button) {
                 'Content-Type': 'application/json',
             },
         });
-
-        button.innerText = isAdding ? '- Remove' : '+ Wishlist';
-        button.classList.toggle('add');
-        button.classList.toggle('remove');
-        button.classList.toggle('bg-green-100', !isAdding);
-        button.classList.toggle('bg-red-500', isAdding);
+        const data = await response.json();
+        if (isAdding){
+            button.innerText = "- Remove";
+            button.classList.remove('add');
+            button.classList.remove('bg-green-500');
+            button.classList.add('remove', 'bg-red-500');
+        } else {
+            button.innerText = "+ Wishlist";
+            button.classList.remove('remove');
+            button.classList.remove('bg-red-500');
+            button.classList.add('add', 'bg-green-500');
+        }
     } catch (error) {
         console.error('Error toggling wishlist:', error);
     }
