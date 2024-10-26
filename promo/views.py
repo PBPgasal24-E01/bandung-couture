@@ -1,18 +1,3 @@
-# from django.shortcuts import render, redirect, reverse, get_object_or_404
-# from django.contrib.auth.decorators import login_required
-# from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-# from django.views.decorators.csrf import csrf_exempt
-# from django.views.decorators.http import require_POST
-# from .models import Promo, RedeemedPromo, HistoryPromo
-# from .forms import PromoEntryForm
-# from django.contrib import messages
-# from django.utils import timezone
-# from django.core import serializers
-# from django.utils.html import strip_tags
-# from django.db import IntegrityError
-# from decimal import Decimal
-# from django.utils.dateparse import parse_datetime
-
 # @login_required(login_url='/account/login')
 # def show_promo(request):
 #     expired_promos = Promo.objects.filter(end_date__lt=timezone.now())
