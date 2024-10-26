@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+<meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock meta %}
+
+{% block content %}
+    {% include 'components/navigation-bar.html' %}
+    <div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 gap-2 min-h-screen bg-gray-100 flex flex-col">
+        {% if id_not_found %}
+        <div class="text-white py-2 px-4 w-full bg-red-500 rounded-lg hover:bg-red-600">Your requested Forum discussion ID is not Found</div>
+        {% endif %}
+        
+        
+        <div class="flex justify-end mb-6">
+            <button class="btn bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showForumForm();">
+              Add New Forum
+            </button>
+        </div>
+
+        <div class="flex cursor-pointer justify-end w-full gap-4 py-2 px-4">
+            <div class="flex items-center">
+              &#8203;
+              <input onclick='refreshForumEntries()' type="checkbox" class="size-5 rounded border-gray-300" id="user-forum" />
+            </div>
+          
+            <div>
+              <strong onclick='checkShowMyForum()' class="text-2xl font-medium text-gray-900"> Only Show My Forums </strong>
+            </div>
+        </div>
+      
+        <div id="forum_entry_cards"></div>
+    </div>
+<script src="{% static 'scripts/forum/forum_page.js' %}"></script>
+{% endblock %}
+

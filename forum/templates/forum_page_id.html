@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+<meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock meta %}
+{% block content %}
+    {% include 'components/navigation-bar.html' %}
+    <div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-gray-100 flex flex-col">
+        <div class="columns-1 gap-6 space-y-6 w-full">
+            <div id="card-{{ pk }}"></div>
+            <div id="child-forums"></div>
+            <div class="relative break-inside-avoid px-10 py-6" >
+                <label class="mb-2 font-bold text-lg text-gray-900" for="comment">Comment:</label>
+                <textarea rows="2" class="mb-4 px-3 py-1 border-2 border-gray-300 rounded-lg w-full" id="comment" name="comment" placeholder="Enter your Comment"></textarea>
+                <div class="flex justify-end">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded max-w-[100px]" onclick="addForumEntry()">Submit</button>
+                </div>
+                
+            </div> 
+        </div> 
+        
+    </div>
+        
+    <script>
+        const pk = "{{ pk }}";
+    </script>
+    <script src="{% static 'scripts/forum/forum_page_id.js' %}"></script>
+
+
+    </script>
+{% endblock %}
+

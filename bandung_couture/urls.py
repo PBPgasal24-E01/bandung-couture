@@ -22,10 +22,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('main.urls')),  # Mengarahkan ke URLs di aplikasi main
-    path('account/', include('account.urls')),  # Mengarahkan ke URLs di aplikasi account
-    path('promo/', include('promo.urls', namespace='promo')),  # Include URL dari aplikasi promo
-    path('stores/', include('stores.urls', namespace='stores')),
+    path('', include('main.urls')),
+    path('account/', include('account.urls')),
+    path('stores/', include('stores.urls')),
+    path('wishlist/', include('wishlist.urls', namespace='wishlist')),
+    path('forum/', include('forum.urls')),
+    path('promo/', include('promo.urls', namespace='promo')),
 ]
 
 if settings.DEBUG:

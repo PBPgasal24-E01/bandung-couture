@@ -5,10 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% block meta %} {% endblock %}
+    <script src="https://kit.fontawesome.com/19ef3fcdaf.js" crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'css/global.css' %}"/>
   </head>
   <body>
     {% block content %} {% endblock %}
+    {% include 'footer.html' %}
   </body>
 </html>
