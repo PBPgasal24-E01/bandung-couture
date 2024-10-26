@@ -67,10 +67,63 @@ async function refreshStoresContent(category = null) {
     var response = await fetch(url);
     var text = await response.text();
     document.querySelector('.stores-content').innerHTML = text;
-
+    attachWishlistEventListeners();
     var index = 0;
     document.querySelectorAll('.store-image').forEach((image) => {
         index %= 8;
         image.setAttribute('src', `/static/images/store-default-${(index++)}.jpg`);
     });
 }
+
+async function toggleWishlist(storeId, button) {
+    const isAdding = button.classList.contains('add'); // Check if it's currently adding
+
+    try {
+        const response = await fetch(isAdding ? `/wishlist/add/${storeId}/` : `/wishlist/remove/${storeId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+        });
+
+        button.innerText = isAdding ? '- Remove' : '+ Wishlist';
+        button.classList.toggle('add');
+        button.classList.toggle('remove');
+        button.classList.toggle('bg-green-100', !isAdding);
+        button.classList.toggle('bg-red-500', isAdding);
+    } catch (error) {
+        console.error('Error toggling wishlist:', error);
+    }
+}
+
+// Attach event listeners to dynamically loaded buttons
+function attachWishlistEventListeners() {
+    document.querySelectorAll('.wishlist-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const storeId = this.getAttribute('data-store-id');
+            toggleWishlist(storeId, this); 
+        });
+    });
+}
+
+
+
+// Get CSRF token helper function
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Initially populate the stores content container with all stores
+refreshStoresContent();

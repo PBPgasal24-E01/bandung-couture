@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest, HttpResponse, HttpResponseForbidden
 from stores.models import Store, Category
 from stores.forms import StoreForm
+from wishlist.models import Wishlist
 
 @login_required(login_url='/account/login')
 def show(request):
@@ -95,6 +96,8 @@ def deliver_all_stores_content_component(request):
     if category_name != 'All' and not Category.objects.filter(name=category_name):
         return HttpResponseBadRequest()
     
+    wishlist_items = Wishlist.objects.filter(user=request.user).values_list('store_id', flat=True)
+    
     if category_name == 'All':
         stores = Store.objects.all()
     else:
@@ -104,6 +107,7 @@ def deliver_all_stores_content_component(request):
     return render(request, 'stores-components/stores-content.html', {
         'stores': stores,
         'edit': False,
+        'wishlist_items': wishlist_items
     })
 
 def deliver_own_stores_content_component(request):

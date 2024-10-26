@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'components/navigation-bar.html' %}
+<!-- Category Filter Navigation -->
+<div class="bg-gray-200 py-20">
+    <h1 class="text-center text-5xl font-bold font-serif">WISHLIST CATEGORIES</h1>
+    <div class="carousel-container flex items-center justify-center mt-10">
+        <div class="carousel-track w-[90%] h-[90%] overflow-hidden">
+            <div class="carousel-items flex flex-wrap justify-center items-center py-2 transition-transform duration-300"> <!-- Change justify-start to justify-center -->
+                <div data-category="all" class="wishlist-categories bg-white text-gray-700 py-3 px-5 rounded hover:bg-gray-300 m-2 min-w-[100px] flex items-center justify-center cursor-pointer">
+                    All
+                </div>
+                {% for category in categories %}
+                <div data-category="{{ category.id }}" class="wishlist-categories bg-white text-gray-700 py-3 px-5 rounded hover:bg-gray-300 m-2 min-w-[100px] flex items-center justify-center cursor-pointer">
+                    {{category.name}}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="toggle-button w-0 h-0 border-t-[24px] border-b-[24px] border-l-[16px] border-transparent border-l-black hover:border-l-gray-700 cursor-pointer" id="toggleButton"></div>
+    </div>
+</div>
+<h1 class="text-center text-5xl font-bold font-serif mt-10">BRANDS</h1>
+<div class="products"></div>
+<h1 class="text-center text-5xl font-bold font-serif mt-10">RECOMMENDATIONS</h1>
+<div class="text-right px-5 text-blue-400 mt-10">
+    <a href="{% url 'stores:show' %}" class="inline-block border border-black border-[1px] hover:bg-gray-200 px-3 py-1 transition duration-300">
+        Show More >>
+    </a>
+</div>
+<div class="recommend"></div>
+
+
+<script src="{% static 'scripts/wishlist/wishlist.js' %}"></script>    
+{% endblock %}

@@ -1,14 +1,14 @@
 {% load static %}
 
 {% if stores %}
-    <div class="grid grid-cols-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
         {% for store in stores %}
-            <div class="shadow shadow-gray-500 hover:shadow-black h-40 my-1 w-[98%] mx-[1%] bg-gray-200 flex rounded-lg">
-                <div class="img-section h-full w-40 flex justify-center items-center flex-shrink-0">
-                    <img class="shadow-black shadow store-image w-[90%] h-[90%]">
+            <div class="shadow shadow-gray-500 hover:shadow-black h-40 bg-gray-200 flex rounded-lg overflow-hidden"> 
+                <div class="img-section w-40 flex justify-center items-center flex-shrink-0">
+                    <img class="shadow-black shadow store-image w-[90%] h-[90%] object-cover"> 
                 </div>
                 <div class="m-2 text-section flex flex-col flex-grow">
-                    <div class="h-[30%] flex">
+                    <div class="h-[30%] flex items-center"> 
                         <div class="h-full w-3/4 overflow-hidden">
                             <h1 class="text-3xl">{{ store.brand }}</h1>
                         </div>
@@ -38,6 +38,18 @@
                             </div>
                         {% endfor %}
                     </div>
+
+                    {% if user.role == 1 %}
+                    <div class="wishlist-section mt-auto flex justify-end">
+                        <button data-store-id="{{ store.id }}" class="wishlist-btn {% if store.id in wishlist_items %}remove bg-red-500{% else %}add bg-green-500{% endif %} text-white py-1 px-2 rounded whitespace-nowrap">
+                            {% if store.id in wishlist_items %}
+                                - Remove 
+                            {% else %}
+                                + Wishlist
+                            {% endif %}
+                        </button>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

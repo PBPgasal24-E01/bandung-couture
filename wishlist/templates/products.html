@@ -1,0 +1,45 @@
+{% load static %}
+
+{% if wishlists %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
+        {% for wishlist_item in wishlists %}
+            <div class="shadow shadow-gray-500 hover:shadow-black h-40 bg-gray-200 flex rounded-lg overflow-hidden"> 
+                <div class="img-section h-full w-40 flex justify-center items-center flex-shrink-0">
+                    <img class="store-images w-[90%] h-[90%] object-cover"> 
+                </div>
+                <div class="m-2 text-section flex flex-col flex-grow">
+                    <div class="h-[30%] overflow-hidden">
+                        <h1 class="text-3xl">{{ wishlist_item.store.brand }}</h1>
+                    </div>
+                    <div class="h-[25%] overflow-hidden">
+                        <p class="text-xs">{{ wishlist_item.store.description }}</p>
+                    </div>
+                    <div class="h-[20%] overflow-hidden">
+                        <p class="text-s">{{ wishlist_item.store.address }}</p>
+                    </div>
+
+                    <div class="flex h-[25%] overflow-hidden">
+                        {% for category in wishlist_item.store.categories.all %}
+                            <div class="bg-black text-white w-[23%] mr-[2.2%] rounded flex flex-shrink-0 justify-center items-center">
+                                <p>{{ category.name }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if user.role == 1 %}
+                    <div class="wishlist-section mt-auto flex justify-end">
+                        <button data-store-id="{{ wishlist_item.store.id }}" class="wishlist-btn remove bg-red-500 text-white py-1 px-2 rounded">
+                            - Remove 
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="bg-gray-300 h-40 mx-[1%] rounded-lg flex flex-col items-center justify-center mt-10">
+        <img src="{% static 'images/sad-face.png' %}" alt="Sad Face" class="h-1/2">
+        <h3 class="text-lg">No Store in Your Wishlist on Recent Category</h3>
+    </div>
+{% endif %}
