@@ -70,8 +70,8 @@ Dataset untuk produk-produk yang tersedia pada Bandung Couture dapat diakses mel
 ## 3. Modul Buat Forum (Yose)
 - **CRUD Forum:** Fitur ini menyediakan ruang bagi pengguna untuk berdiskusi tentang berbagai topik terkait fashion.
 
-|                       | Visitor                                           | Contributor                                     |
-|-----------------------|--------------------------------------------------|------------------------------------------------|
+|                       | Visitor dan Contributor                                     |
+|-----------------------|--------------------------------------------------------------------------------------------------|
 | Peran Pengguna      | Dapat membuat forum, berkomentar, dan melihat forum yang dibuat sendiri.                           |
 
 ---
