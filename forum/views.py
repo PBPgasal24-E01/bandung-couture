@@ -56,7 +56,7 @@ def show_json(request):
         forum_entries.append(entry)
 
     # Return the data as JSON
-    return JsonResponse(forum_entries, safe=False)
+    return JsonResponse(forum_entries, safe=False, status=200)
 
 # only show the id's data
 def show_json_by_id(request,id) :
@@ -78,7 +78,7 @@ def show_json_by_id(request,id) :
         }
     }
 
-    return JsonResponse(entry, safe=False)
+    return JsonResponse(entry, safe=False, status=200)
 
 # only show the id's childs
 def show_json_childs_by_id(request,id) :
@@ -102,7 +102,7 @@ def show_json_childs_by_id(request,id) :
         
         forum_entries.append(entry)
 
-    return JsonResponse(forum_entries, safe=False)
+    return JsonResponse(forum_entries, safe=False, status=200)
 
 # only show root
 def show_root_json(request) :
@@ -126,7 +126,7 @@ def show_root_json(request) :
         
         forum_entries.append(entry)
 
-    return JsonResponse(forum_entries, safe=False)
+    return JsonResponse(forum_entries, safe=False, status=200)
 
 # filtered for the user logged in
 def show_root_json_filter_user(request) :
@@ -150,7 +150,7 @@ def show_root_json_filter_user(request) :
         
         forum_entries.append(entry)
 
-    return JsonResponse(forum_entries, safe=False)
+    return JsonResponse(forum_entries, safe=False, status=200)
 
 @require_POST
 @login_required(login_url='/account/login')
