@@ -1,7 +1,7 @@
 const modalShowButton = document.querySelector('.modal-show-button');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const modal = document.querySelector('.modal');
-const modalForm = document.querySelector('.modal form');
+const modalForm = document.querySelector('.modal-form');
 
 refreshStoresContent();
 

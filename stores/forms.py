@@ -29,7 +29,7 @@ class StoreForm(ModelForm):
                 'class': 'w-full focus:outline-none border-[1.4px] border-y-[0.7px] border-gray-500 focus:border-gray-800',
             }),
             'website': forms.URLInput(attrs={
-                'placeholder': 'website',
+                'placeholder': 'website (must insert top level domain. eg. .com)',
                 'class': 'w-full focus:outline-none border-[1.4px] border-y-[0.7px] border-gray-500 focus:border-gray-800',
             }),
             'social_media': forms.TextInput(attrs={
