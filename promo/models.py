@@ -9,7 +9,7 @@ class Promo(models.Model):
     description = models.TextField()
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
     start_date = models.DateTimeField(default=timezone.now)
-    end_date = models.DateTimeField()
+    end_date = models.DateTimeField(default=timezone.now)
     promo_code = models.CharField(max_length=50, unique=True)
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 

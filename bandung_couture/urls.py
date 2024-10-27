@@ -29,7 +29,6 @@ urlpatterns = [
     path('forum/', include('forum.urls')),
     path('testimony/', include('testimony.urls')),
     path('promo/', include('promo.urls'))
-
 ]
 
 if settings.DEBUG:

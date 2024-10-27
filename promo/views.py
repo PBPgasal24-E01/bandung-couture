@@ -53,7 +53,6 @@ def filter_promos(request):
 
 @login_required(login_url='/account/login')
 @require_POST 
-@csrf_exempt
 def create_promo(request):
     if request.method == 'POST':
         form = PromoEntryForm(request.POST)
@@ -71,7 +70,6 @@ def create_promo(request):
    
 @login_required(login_url='/account/login')
 @require_POST
-@csrf_exempt
 def update_promo(request, id):
     promo = get_object_or_404(Promo, pk=id)
     if request.method == "POST":
@@ -88,19 +86,24 @@ def update_promo(request, id):
 def get_promo(request, id):
     if request.method == 'GET':
         promo = get_object_or_404(Promo, pk=id)  
+
+
+        start_date = promo.start_date.strftime('%Y-%m-%dT%H:%M')
+        end_date = promo.end_date.strftime('%Y-%m-%dT%H:%M')
+
         data = {
             'id': promo.id,
             'title': promo.title,
             'description': promo.description,
             'discount_percentage': promo.discount_percentage,
             'promo_code': promo.promo_code,
-            'start_date': promo.start_date,
-            'end_date': promo.end_date,
+            'start_date': start_date, 
+            'end_date': end_date,     
+
         }
         return JsonResponse(data)
 
 @login_required(login_url='/account/login')
-@csrf_exempt
 def delete_promo(request, id):
     promo = get_object_or_404(Promo, pk=id)
     promo.delete()
