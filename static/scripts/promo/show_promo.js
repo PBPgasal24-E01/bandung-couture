@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    
+
     $('#filter-discount').on('change', function() {
         const filterValue = $(this).val();
         filterPromos(filterValue);
@@ -98,7 +98,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.status === 'success' || response.success) {
-                    location.reload(); // Refresh on success
+                    location.reload(); 
                 } else {
                     alert('Error: ' + JSON.stringify(response.errors));
                 }
@@ -155,7 +155,9 @@ $(document).ready(function() {
 
     $(document).on('click', '.delete-promo', function() {
         var promoId = $(this).data('id');
-
+    
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -169,6 +171,9 @@ $(document).ready(function() {
                 $.ajax({
                     url: '/promo/delete/' + promoId + '/',
                     method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    },
                     data: { id: promoId },
                     success: function(response) {
                         Swal.fire(
@@ -190,7 +195,7 @@ $(document).ready(function() {
             }
         });
     });
-    
+
     $('#backButton').on('click', function() {
         $('#promoForm').slideUp();
         $('#createPromoButton').show(); 
@@ -201,6 +206,4 @@ $(document).ready(function() {
     });
 
 });
-
-
 
