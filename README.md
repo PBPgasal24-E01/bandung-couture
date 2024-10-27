@@ -6,7 +6,6 @@
 - [Pembagian Tugas](#pembagian-tugas-modul)
 - [Latar Belakang](#latar-belakang-bandung-couture)
 - [Dataset](#dataset) 
-- [Role](#role-pengguna) 
 - [Daftar Modul](#daftar-modul) 
 
 ## Anggota Kelompok E01 👥
@@ -33,20 +32,6 @@ Meskipun Bandung memiliki banyak pilihan, konsumen sering kali kesulitan menemuk
 ## Dataset 📊
 Dataset untuk produk-produk yang tersedia pada Bandung Couture dapat diakses melalui link berikut: [Google Sheets](https://docs.google.com/spreadsheets/d/11mQOJqHywUHE1BKJ_xEZDighsk_zzr7Ihb33854lfyE/edit?gid=146689139#gid=146689139).
 
-## Role Pengguna 👤
-| Role         | Permissions                                       |
-|--------------|--------------------------------------------------|
-| Visitor      | - Melihat produk                                 |
-|              | - Filter produk                                  |
-|              | - CRUD Testimoni                                 |
-|              | - CRUD Forum                                     |
-|              | - CRUD Wishlist                                  |
-| Contributor   | - Melihat Produk                                 |
-|              | - Filter Produk                                  |
-|              | - CRUD Produk                                    |
-|              | - CRUD Promo                                     |
-|              | - CRUD Forum                                     |
-
 ## Daftar Modul
 
 ## 1. Modul Buat Produk (Dava)
@@ -63,7 +48,7 @@ Dataset untuk produk-produk yang tersedia pada Bandung Couture dapat diakses mel
 
 |                       | Visitor                                           | Contributor                                     |
 |-----------------------|--------------------------------------------------|------------------------------------------------|
-| Peran Pengguna       | Dapat melihat testimoni serta rating.             | Dapat menambahkan dan menghapus testimoni serta rating |
+| Peran Pengguna       | Dapat melihat, menambahkan, dan menghapus testimoni serta rating. | Dapat melihat testimoni serta rating dari visitor |
 
 ---
 
@@ -72,7 +57,7 @@ Dataset untuk produk-produk yang tersedia pada Bandung Couture dapat diakses mel
 
 |                       | Visitor dan Contributor                                     |
 |-----------------------|--------------------------------------------------------------------------------------------------|
-| Peran Pengguna      | Dapat membuat forum, berkomentar, dan melihat forum yang dibuat sendiri.                           |
+| Peran Pengguna        | Dapat membuat forum, berkomentar, dan melihat forum yang dibuat sendiri.                           |
 
 ---
 
@@ -81,7 +66,7 @@ Dataset untuk produk-produk yang tersedia pada Bandung Couture dapat diakses mel
 
 |                       | Visitor                                           | Contributor                                     |
 |-----------------------|--------------------------------------------------|------------------------------------------------|
-| Peran Pengguna       | Dapat melihat wishlist dan menambahkan wishlist produk.   | Tidak dapat melihat wishlist visitor ataupun menambahkannya |
+| Peran Pengguna        | Dapat melihat wishlist dan menambahkan wishlist produk.   | Tidak dapat melihat wishlist visitor ataupun menambahkannya |
 
 ---
 
@@ -90,7 +75,7 @@ Dataset untuk produk-produk yang tersedia pada Bandung Couture dapat diakses mel
 
 |                       | Visitor                                           | Contributor                                     |
 |-----------------------|--------------------------------------------------|------------------------------------------------|
-| Peran Pengguna       | Dapat melihat informasi promo dan menggunakan filter diskon. | Dapat membuat, mengedit, dan menghapus promo. |
+| Peran Pengguna        | Dapat melihat informasi promo dan menggunakan filter diskon. | Dapat membuat, mengedit, dan menghapus promo. |
 
 ---
 
