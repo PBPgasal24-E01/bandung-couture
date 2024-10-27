@@ -50,7 +50,7 @@ Dataset untuk produk-produk yang tersedia pada Bandung Couture dapat diakses mel
 ## Daftar Modul
 
 ## 1. Modul Buat Produk (Dava)
-- **CRUD Produk:** Fitur ini memungkinkan pengguna untuk membuat, membaca, memperbarui, dan menghapus produk dalam aplikasi. 
+- **CRUD Produk:** Fitur ini memungkinkan pengguna untuk membuat, membaca, memperbarui, dan menghapus produk dalam web Bandung Couture.
 
 |                       | Visitor                                           | Contributor                                     |
 |-----------------------|--------------------------------------------------|------------------------------------------------|
@@ -59,11 +59,11 @@ Dataset untuk produk-produk yang tersedia pada Bandung Couture dapat diakses mel
 ---
 
 ## 2. Modul Buat Testimoni + Rating (Raihan)
-- **CRUD Testimoni:** Fitur ini memungkinkan pengguna untuk memberikan testimoni dan rating untuk produk yang telah dibeli.
+- **CRUD Testimoni:** Fitur ini memungkinkan pengguna untuk memberikan testimoni dan rating untuk produk yang ingin dicari sebelum dibeli.
 
 |                       | Visitor                                           | Contributor                                     |
 |-----------------------|--------------------------------------------------|------------------------------------------------|
-| Peran Pengguna       | Dapat melihat dan memberikan testimoni serta rating. | Dapat menambahkan, mengedit, dan menghapus testimoni. |
+| Peran Pengguna       | Dapat melihat testimoni serta rating.             | Dapat menambahkan dan menghapus testimoni serta rating |
 
 ---
 
@@ -72,7 +72,7 @@ Dataset untuk produk-produk yang tersedia pada Bandung Couture dapat diakses mel
 
 |                       | Visitor                                           | Contributor                                     |
 |-----------------------|--------------------------------------------------|------------------------------------------------|
-| Peran Pengguna      | Dapat membuat forum, berkomentar, dan melihat forum yang dibuat sendiri. | Dapat menginisiasi dan menjawab diskusi.      |
+| Peran Pengguna      | Dapat membuat forum, berkomentar, dan melihat forum yang dibuat sendiri.                           |
 
 ---
 
@@ -81,12 +81,12 @@ Dataset untuk produk-produk yang tersedia pada Bandung Couture dapat diakses mel
 
 |                       | Visitor                                           | Contributor                                     |
 |-----------------------|--------------------------------------------------|------------------------------------------------|
-| Peran Pengguna       | Dapat melihat wishlist dan menambahkan produk.   | Dapat menambahkan dan menghapus produk dari wishlist. |
+| Peran Pengguna       | Dapat melihat wishlist dan menambahkan wishlist produk.   | Tidak dapat melihat wishlist visitor ataupun menambahkannya |
 
 ---
 
 ## 5. Modul Promo (Regina)
-- **CRUD Promo:** Fitur ini memungkinkan pengguna untuk melihat, membuat, dan mengelola promo yang tersedia dalam aplikasi.
+- **CRUD Promo:** Fitur ini memungkinkan pengguna untuk melihat, membuat, dan mengelola promo produk atau event outlet yang ingin disebarkan dalam web Bandung Couture.
 
 |                       | Visitor                                           | Contributor                                     |
 |-----------------------|--------------------------------------------------|------------------------------------------------|
