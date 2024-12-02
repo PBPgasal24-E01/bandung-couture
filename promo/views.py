@@ -109,3 +109,20 @@ def delete_promo(request, id):
     promo.delete()
     request.session['success_message'] = 'Promo deleted successfully!' 
     return JsonResponse({'success': True})
+
+
+def show_json(request):
+    promos = Promo.objects.all()  # Ambil semua data dari model Promo
+
+    promo_list = [{
+        'id': promo.id,
+        'title': promo.title,
+        'description': promo.description,
+        'discount_percentage': promo.discount_percentage,
+        'promo_code': promo.promo_code,
+        'start_date': promo.start_date.strftime('%Y-%m-%d'),
+        'end_date': promo.end_date.strftime('%Y-%m-%d'),
+        'created_by': promo.created_by.username if promo.created_by else None
+    } for promo in promos]
+
+    return JsonResponse({'promos': promo_list})
