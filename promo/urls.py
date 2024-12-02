@@ -5,7 +5,8 @@ from .views import (
     update_promo,
     delete_promo,
     get_promo,
-    filter_promos
+    filter_promos,
+    show_json
 )
 
 app_name = 'promo' 
@@ -18,4 +19,5 @@ urlpatterns = [
     path('get/<uuid:id>/', get_promo, name='get_promo'),
     path('delete/<uuid:id>/', delete_promo, name='delete_promo'),
     path('filter/', filter_promos, name='filter_promos'),
+    path('json/', show_json, name='show_json'),
 ]
