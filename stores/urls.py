@@ -15,4 +15,6 @@ urlpatterns=[
     path('deliver-own-stores-content-component', deliver_own_stores_content_component, name='deliver-own-stores-content-component'),
     path('deliver-store-form', deliver_store_form, name='deliver-store-form'),
     path('deliver-store-form/<int:pk>', deliver_store_form, name='deliver-store-form'),
+    path('show-rest-all', show_rest_all, name='show-rest-all'),
+    path('show-rest-own', show_rest_own, name='show-rest-own'),
 ]

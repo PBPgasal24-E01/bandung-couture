@@ -10,15 +10,17 @@ def login(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
+
     if user is not None:
         if user.is_active:
             auth_login(request, user)
+            
             # Status login sukses.
             return JsonResponse({
                 "username": user.username,
                 "status": True,
-                "message": "Login sukses!"
-                # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
+                "message": "Login sukses!",
+                "role": user.role,
             }, status=200)
         else:
             return JsonResponse({
@@ -41,7 +43,7 @@ def register(request):
             username = data['username']
             password1 = data['password1']
             password2 = data['password2']
-            user_type = data.get('user_type')  # Ambil tipe user
+            role = data.get('role')  # Ambil role user
 
             if password1 != password2:
                 return JsonResponse({
@@ -57,7 +59,7 @@ def register(request):
 
             # Buat user dengan tipe tertentu
             user = User.objects.create_user(username=username, password=password1)
-            user.user_type = user_type  # Set tipe user
+            user.role = role # Set role user
             user.save()
 
             return JsonResponse({

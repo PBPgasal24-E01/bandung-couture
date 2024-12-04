@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from django.urls import reverse
+from django.core import serializers
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest, HttpResponse, HttpResponseForbidden
 from stores.models import Store, Category
 from stores.forms import StoreForm
@@ -138,3 +139,13 @@ def deliver_store_form(request, pk=None):
         form = StoreForm(instance=stores[0])
 
     return HttpResponse(form)
+
+@require_GET
+def show_rest_all(request):
+    stores = Store.objects.all()
+    return HttpResponse(serializers.serialize('json', stores), content_type='application/json')
+
+@require_GET
+def show_rest_own(request):
+    stores = Store.objects.filter(user = request.user)
+    return HttpResponse(serializers.serialize('json', stores), content_type='application/json')
