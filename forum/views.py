@@ -5,6 +5,7 @@ from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
+import json
 from django.http import JsonResponse
 from forum.forms import ForumEntryForm
 from django.contrib.auth.decorators import login_required
@@ -57,6 +58,11 @@ def show_json(request):
 
     # Return the data as JSON
     return JsonResponse(forum_entries, safe=False, status=200)
+
+def show_json_raw(request) :
+    data = Forum.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
 
 # only show the id's data
 def show_json_by_id(request,id) :
@@ -181,6 +187,23 @@ def add_forum_entry_ajax(request):
         new_forum.save()
     return HttpResponse(b"CREATED", status=201)
 
+@csrf_exempt
+def add_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        new_mood = Forum.objects.create(
+            user=request.user,
+            title=data["title"],
+            details=data["details"]
+        )
+
+        new_mood.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
 @require_POST
 @login_required(login_url='/account/login')
 def edit_forum(request):
@@ -212,6 +235,28 @@ def delete_forum(request):
     forum.delete()
     return HttpResponse(b"DELETED", status=201) 
 
+@csrf_exempt 
+def delete_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        
+        try : 
+            forum = Forum.objects.get(pk = data['pk'])
+        except : 
+            print(data["pk"])
+            print("GUA KEPANGGIL")
+            return JsonResponse({"status": "error"}, status=404)
+        
+        if(request.user != forum.user) :
+            return HttpResponse(b"Failed, unauthorized", status=401)
+        
+        forum.delete()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+        
+
 
 def time_since(time):
     delta = now() - time
@@ -224,4 +269,5 @@ def time_since(time):
     else:
         days = delta.days
         return f"{days}d ago"
+    
     
