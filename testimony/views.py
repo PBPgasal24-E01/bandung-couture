@@ -10,14 +10,24 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core import serializers
 import json
-# Create your views here.
-def show_testimony_by_merchant(request, id):
-    store = Store.objects.get(pk=id) 
-    context = {
-        'store': store
-    }    
-    return render(request, "show_testimony.html", context)
 
+@login_required(login_url='/account/login')
+@csrf_exempt
+def delete_testimony(request, id):
+    if request.method == "DELETE":
+        try:
+            # Retrieve and delete the Testimony object
+            testimony = Testimony.objects.get(pk = id)
+            testimony.delete()
+            return JsonResponse({"message": "Testimony deleted successfully"}, status=200)
+        except Testimony.DoesNotExist:
+            # Return a 404 if the object does not exist
+            return JsonResponse({"error": "Testimony not found"}, status=404)
+        except Exception as e:
+            # Handle any unexpected errors
+            return JsonResponse({"error": f"An error occurred: {str(e)}"}, status=500)
+    else:
+        return HttpResponseNotAllowed(["DELETE"])
 
 def show_testimony_by_merchant_json(request, id):
     data = Testimony.objects.filter(storeId__pk=id)
@@ -70,24 +80,15 @@ def create_new_testimony(request):
         storeId=store
     )
 
+
     payload.save()
     return HttpResponse(b"CREATED", status=201)
 
 
-@login_required(login_url='/account/login')
-@csrf_exempt
-def delete_testimony(request, id):
-    if request.method == "DELETE":
-        try:
-            # Retrieve and delete the Testimony object
-            testimony = Testimony.objects.get(pk = id)
-            testimony.delete()
-            return JsonResponse({"message": "Testimony deleted successfully"}, status=200)
-        except Testimony.DoesNotExist:
-            # Return a 404 if the object does not exist
-            return JsonResponse({"error": "Testimony not found"}, status=404)
-        except Exception as e:
-            # Handle any unexpected errors
-            return JsonResponse({"error": f"An error occurred: {str(e)}"}, status=500)
-    else:
-        return HttpResponseNotAllowed(["DELETE"])
+# Create your views here.
+def show_testimony_by_merchant(request, id):
+    store = Store.objects.get(pk=id) 
+    context = {
+        'store': store
+    }    
+    return render(request, "show_testimony.html", context)
