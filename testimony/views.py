@@ -18,6 +18,7 @@ def show_testimony_by_merchant(request, id):
     }    
     return render(request, "show_testimony.html", context)
 
+
 def show_testimony_by_merchant_json(request, id):
     data = Testimony.objects.filter(storeId__pk=id)
 
@@ -33,6 +34,7 @@ def show_testimony_by_merchant_json(request, id):
 
     return JsonResponse(data_new, safe=False)
 
+
 def get_merchant_rating(request, id):
     testimonies = Testimony.objects.filter(storeId__pk=id)
     num = 0
@@ -46,6 +48,7 @@ def get_merchant_rating(request, id):
         }
 
     return JsonResponse(data, safe=False)
+
 
 @require_POST
 @login_required(login_url='/account/login')
@@ -69,6 +72,7 @@ def create_new_testimony(request):
 
     payload.save()
     return HttpResponse(b"CREATED", status=201)
+
 
 @login_required(login_url='/account/login')
 @csrf_exempt
