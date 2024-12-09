@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from django.core import serializers
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest, HttpResponse, HttpResponseForbidden
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest, HttpResponse
 from stores.models import Store, Category
 from stores.forms import StoreForm
 from wishlist.models import Wishlist
+import json
 
 @login_required(login_url='/account/login')
 def show(request):
@@ -147,5 +149,44 @@ def show_rest_all(request):
 
 @require_GET
 def show_rest_own(request):
-    stores = Store.objects.filter(user = request.user)
+    if request.user.is_authenticated and request.user.role == 2:
+        stores = Store.objects.filter(user = request.user)
+    else: 
+        stores = Store.objects.none()
+    
     return HttpResponse(serializers.serialize('json', stores), content_type='application/json')
+
+@require_POST
+@csrf_exempt #does not require csrf token from mobile unless csrf can be fetched to the mobile
+def add_mobile(request):
+
+    if not request.user.is_authenticated or request.user.role != 2:
+        return JsonResponse({
+            'status': 'error',
+            'description': 'failed: attempted to contribute a store as a non-contributor',
+        }, status=403)
+    
+    try:
+        data = json.loads(request.body)
+        brand = data['brand']
+        description = data['description']
+        address = data['address']
+        contact_number = data['contact_number']
+        website = data['website']
+        social_media = data['social_media']
+
+        store = Store.objects.create(user=request.user, brand=brand, description=description, address=address,
+                             contact_number=contact_number, website=website, social_media=social_media)
+        store.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'description': 'successfully stored contributed store to database',
+        }, status=200)
+
+    except KeyError:
+        return JsonResponse({
+            'status': 'error',
+            'description': 'failed: incomplete parameters',
+        }, status=401)
+

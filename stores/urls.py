@@ -17,4 +17,5 @@ urlpatterns=[
     path('deliver-store-form/<int:pk>', deliver_store_form, name='deliver-store-form'),
     path('show-rest-all', show_rest_all, name='show-rest-all'),
     path('show-rest-own', show_rest_own, name='show-rest-own'),
+    path('add-mobile', add_mobile, name='add-mobile'),
 ]
