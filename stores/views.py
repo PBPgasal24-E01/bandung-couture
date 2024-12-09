@@ -147,5 +147,9 @@ def show_rest_all(request):
 
 @require_GET
 def show_rest_own(request):
-    stores = Store.objects.filter(user = request.user)
+    if request.user.is_authenticated and request.user.role == 2:
+        stores = Store.objects.filter(user = request.user)
+    else: 
+        stores = Store.objects.none()
+    
     return HttpResponse(serializers.serialize('json', stores), content_type='application/json')
