@@ -164,7 +164,7 @@ def add_mobile(request):
         return JsonResponse({
             'status': 'error',
             'description': 'failed: attempted to contribute a store as a non-contributor',
-        }, status=403)
+        }, status=400)
     
     try:
         data = json.loads(request.body)
@@ -187,6 +187,89 @@ def add_mobile(request):
     except KeyError:
         return JsonResponse({
             'status': 'error',
-            'description': 'failed: incomplete parameters',
-        }, status=401)
+            'description': 'incomplete parameters',
+        }, status=400)
+
+@require_POST
+@csrf_exempt
+def edit_mobile(request):
+    if not request.user.is_authenticated or request.user.role != 2:
+        return JsonResponse({
+            'status': 'error',
+            'description': 'attempted to contribute a store as a non-contributor',
+        }, status=400)
+
+    try:
+        data = json.loads(request.body)
+        pk = int(data['pk'])
+
+        stores = Store.objects.filter(pk=pk, user=request.user)
+        if len(stores) == 0:
+            return JsonResponse({
+                'status': 'error',
+                'description': 'referred store does not exist',
+            }, status=400)
+        
+        store = stores[0]
+
+        brand = data['brand']
+        description = data['description']
+        address = data['address']
+        contact_number = data['contact_number']
+        website = data['website']
+        social_media = data['social_media']
+
+        store.brand = brand
+        store.description = description
+        store.address = address
+        store.contact_number = contact_number
+        store.website = website
+        store.social_media = social_media
+
+        store.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'description': 'store successfully updated',
+        }, status=200)
+
+    except KeyError:
+        return JsonResponse({
+            'status': 'error',
+            'description': 'incomplete parameters',
+        }, status=400)
+
+    except:
+        return JsonResponse({
+            'status': 'error',
+            'description': 'unexpected error',
+        }, status=500)
+
+@require_POST
+@csrf_exempt
+def delete_mobile(request):
+
+    if not request.user.is_authenticated or request.user.role != 2:
+        return JsonResponse({
+            'status': 'error',
+            'description': 'store deletion attempt by non-contributor',
+        }, status=400)
+
+    data = json.loads(request.body)
+    pk = int(data['pk'])
+
+    stores = Store.objects.filter(user=request.user, pk=pk)
+    if len(stores) == 0:
+        return JsonResponse({
+            'status': 'error',
+            'description': 'store not found, perhaps already deleted',
+        }, status=400)
+    store = stores[0]
+    store.delete()
+
+    return JsonResponse({
+        'status': 'success',
+        'description': f'successfully deleted store {store.brand}',
+    }, status=200)
+
 
