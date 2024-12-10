@@ -18,4 +18,6 @@ urlpatterns=[
     path('show-rest-all', show_rest_all, name='show-rest-all'),
     path('show-rest-own', show_rest_own, name='show-rest-own'),
     path('add-mobile', add_mobile, name='add-mobile'),
+    path('edit-mobile', edit_mobile, name='edit-mobile'),
+    path('delete-mobile', delete_mobile, name='delete-mobile'),
 ]
