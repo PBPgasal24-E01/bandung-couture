@@ -88,4 +88,11 @@ def filter_by_category(request, category_id):
         'wishlists': wishlists
     })
 
-
+def is_in_wishlist(request, store_id):
+    store_exists = Wishlist.objects.filter(user=request.user, store__id=store_id).exists()
+    
+    # Jika store tidak ada di wishlist, kembalikan status false tanpa error
+    return JsonResponse({
+        'store_id': store_id,
+        'is_in_wishlist': store_exists
+    })
