@@ -272,4 +272,7 @@ def delete_mobile(request):
         'description': f'successfully deleted store {store.brand}',
     }, status=200)
 
+def get_store_by_id(request, store_id):
+    store = Store.objects.get(id=store_id)
+    return HttpResponse(serializers.serialize('json', [store]), content_type='application/json')
 
