@@ -8,7 +8,13 @@ urlpatterns = [
     path('merchant/<str:id>/', show_testimony_by_merchant, name='show_testimony_by_merchant'),
     path('add_testimony/', create_new_testimony, name='create_new_testimony'),
 
-    path('get_all_merchant/<str:id>/', get_all_testimomny_by_id, name='get_all_testimony_by_id'),
+    path('add_testimony_flutter/', add_testimony_flutter, name='create_new_testimony_flutter'),
+    path('edit_testimony_flutter/', edit_testimony_flutter, name='edit_testimony_flutter'),
+    path('delete_testimony_flutter/<str:id>/', delete_testimony_flutter, name='delete_testimony_flutter'),
+
+    path('exist_testimony_by_store/<str:id>/', exist_testimony_in_store, name='exist_testimony'),
+
+    path('get_all_merchant/<str:id>/', get_all_testimony_by_id, name='get_all_testimony_by_id'),
     path('get_all_merchant/', get_all_store, name='get_all_merchant'),
 
 

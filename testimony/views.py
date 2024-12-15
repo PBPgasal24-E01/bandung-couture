@@ -66,8 +66,28 @@ def get_number_of_rating(request, id):
 
     return JsonResponse(data, safe=False)
 
-def get_all_testimomny_by_id(request, id):
-    user_testimony = Testimony.objects.filter(userId__pk=id)
+def exist_testimony_in_store(request, id):
+    testimonies = Testimony.objects.filter(storeId__pk=id)
+    
+    exist = False
+    testimony = ""
+    rating = 0
+    pk = 0
+    user = ""
+
+    for item in testimonies:
+        if(item.userId == request.user):
+            exist = True
+            user = item.userId
+            testimony = item.testimony
+            rating = item.rating
+            pk = item.pk
+
+    print(exist, testimony) 
+    return JsonResponse({"status": exist, "testimony": testimony, "rating": rating, "pk": pk, "user": (user.username if user != "" else "") }, safe=False) 
+
+def get_all_testimony_by_id(request):
+    user_testimony = Testimony.objects.filter(userId=request.user)
     testimony_store = []
     for item in user_testimony:
         testimony_store.append(item.storeId.pk)
@@ -106,6 +126,88 @@ def get_all_store(request):
         })
 
     return JsonResponse(response, safe=False)
+
+@require_POST
+@csrf_exempt
+def edit_testimony_flutter(request):
+    data = json.loads(request.body)
+
+    testimony = data["testimony"]
+    rating = data["rating"]
+    pk = data["pk"]
+    
+    if(not 0 < float(rating) <= 5):
+        return JsonResponse({
+            "status": False,
+            "message": "Angka tidak valid."
+        }, status=400)
+
+    current_testimony = Testimony.objects.get(pk=int(pk))
+
+    current_testimony.testimony = testimony
+    current_testimony.rating = int(rating)
+
+    current_testimony.save()
+    
+    return JsonResponse({
+            "status": 'success',
+            "message": "Testimony berhasil di ubah!"
+        }, status=200)
+
+
+@require_POST
+@csrf_exempt
+def add_testimony_flutter(request):
+    data = json.loads(request.body)
+
+    testimony = data["testimony"]
+    rating = data["rating"]
+    storeId = data["store_id"]
+    store = Store.objects.get(pk=storeId)  # Fetch the Store instance
+    
+    user = request.user
+    
+    if(not 0 < float(rating) <= 5):
+        return JsonResponse({
+            "status": False,
+            "message": "Angka tidak valid."
+        }, status=400)
+    
+    payload = Testimony(
+        testimony=testimony, 
+        rating=rating,
+        userId=user,
+        storeId=store
+    )
+
+    payload.save()
+    return JsonResponse({
+            "username": user.username,
+            "status": 'success',
+            "message": "Testimoni berhasil dibuat!"
+        }, status=200)
+
+@csrf_exempt
+def delete_testimony_flutter(request, id):
+    try:
+        # Retrieve and delete the Testimony object
+        testimony = Testimony.objects.get(pk=id)
+        testimony.delete()
+        return JsonResponse({
+            "status": 'success',
+            "message": "Testimoni berhasil dibuat!"
+        }, status=200)
+    except Testimony.DoesNotExist:
+            return JsonResponse({
+                    "status": 'failed',
+                    "message": "Tidak ada testimoni dengan id ini!"
+                }, status=404)
+    except Exception as e:
+            return JsonResponse({
+                    "status": 'failed',
+                    "message": f"Terjadi error: {str(e)}"
+                }, status=500)
+
 
 
 @require_POST
