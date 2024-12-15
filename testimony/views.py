@@ -47,6 +47,67 @@ def get_merchant_rating(request, id):
 
     return JsonResponse(data, safe=False)
 
+def get_number_of_rating(request, id):
+    testimonies = Testimony.objects.filter(storeId__pk=id)
+    num = 0
+    for testimony in testimonies:
+        num += testimony.rating
+
+    data = {
+        "rating": 0,
+        "count": len(testimonies)
+    }
+
+    if(len(testimonies) != 0):
+        data = {
+            "rating": num / len(testimonies),
+            "count": len(testimonies)
+        }
+
+    return JsonResponse(data, safe=False)
+
+def get_all_testimomny_by_id(request, id):
+    user_testimony = Testimony.objects.filter(userId__pk=id)
+    testimony_store = []
+    for item in user_testimony:
+        testimony_store.append(item.storeId.pk)
+
+    store = Store.objects.filter(pk__in=testimony_store)
+
+    response = []
+    for item in store:
+        response.append({
+            "pk": item.pk,
+            "user": item.user, 
+            "brand": item.brand,
+            "description" : item.description,
+            "address": item.address,
+            "contact_number": item.contact_number,
+            "website": item.contact_number,
+            "social_media": item.social_media
+        })
+
+    return JsonResponse(response, safe=False)
+    
+def get_all_store(request):
+    store = Store.objects.all()
+
+    response = []
+    for item in store:
+        response.append({
+            "pk": item.pk,
+            "user": item.user, 
+            "brand": item.brand,
+            "description" : item.description,
+            "address": item.address,
+            "contact_number": item.contact_number,
+            "website": item.contact_number,
+            "social_media": item.social_media
+        })
+
+    return JsonResponse(response, safe=False)
+
+
 @require_POST
 @login_required(login_url='/account/login')
 @csrf_exempt
