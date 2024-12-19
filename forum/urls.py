@@ -1,6 +1,6 @@
 from django.urls import path
 from forum.views import show_json_raw, show_forum_page, show_root_json, add_forum_entry_ajax, show_root_json_filter_user, edit_forum, delete_forum, show_forum_page_id, show_json_by_id, show_json_childs_by_id, show_json
-from forum.views import add_flutter, delete_flutter
+from forum.views import add_flutter, delete_flutter,edit_flutter
 from django.shortcuts import redirect
 
 app_name = 'forum'
@@ -20,4 +20,5 @@ urlpatterns = [
     path('delete_forum/', delete_forum, name="delete_forum"),
     path('delete_flutter/', delete_flutter, name='delete_flutter'),
     path('show_json_raw/', show_json_raw, name="show_json_raw"),
+    path('edit_flutter/', edit_flutter, name="edit_flutter"),
 ]

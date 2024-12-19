@@ -32,7 +32,7 @@ def show_forum_page_id(request,id):
 
 # show all
 def show_json(request):
-    data = Forum.objects.all()
+    data = Forum.objects.all().order_by("-time")
     current_user = request.user
     forum_entries = []
     
@@ -80,6 +80,7 @@ def show_json_by_id(request,id) :
             'details': forum_data.details,
             'time': time_since(forum_data.time),  
             'username': forum_data.user.username,  
+            'parent': "None",
             'is_author': (current_user.id == forum_data.user.id),
         }
     }
@@ -192,13 +193,15 @@ def add_flutter(request):
     if request.method == 'POST':
 
         data = json.loads(request.body)
-        new_mood = Forum.objects.create(
+        parent = Forum.objects.get(pk=data["parent"])
+        new_data = Forum.objects.create(
             user=request.user,
             title=data["title"],
-            details=data["details"]
+            details=data["details"],
+            parent=parent
         )
 
-        new_mood.save()
+        new_data.save()
 
         return JsonResponse({"status": "success"}, status=200)
     else:
@@ -219,6 +222,26 @@ def edit_forum(request):
     form.save()
     return HttpResponse(b"EDITED", status=201)
 
+@csrf_exempt
+def edit_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        
+        try : 
+            forum = Forum.objects.get(pk = data['pk'])
+        except : 
+            return JsonResponse({"status": "error"}, status=404)
+        
+        if(request.user != forum.user) :
+            return HttpResponse(b"Failed, unauthorized", status=401)
+        
+        form = ForumEntryForm(data or None, instance=forum)
+        form.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+        
 
 @require_POST
 @login_required(login_url='/account/login')
@@ -243,8 +266,6 @@ def delete_flutter(request):
         try : 
             forum = Forum.objects.get(pk = data['pk'])
         except : 
-            print(data["pk"])
-            print("GUA KEPANGGIL")
             return JsonResponse({"status": "error"}, status=404)
         
         if(request.user != forum.user) :
