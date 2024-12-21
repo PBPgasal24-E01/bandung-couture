@@ -177,6 +177,13 @@ def add_mobile(request):
 
         store = Store.objects.create(user=request.user, brand=brand, description=description, address=address,
                              contact_number=contact_number, website=website, social_media=social_media)
+
+        categories_string = data['categories']
+        if categories_string != '':
+            category_pk_list = list(map(int, categories_string.split(',')))
+            categories = Category.objects.filter(pk__in=category_pk_list)
+            store.categories.add(*categories)
+                    
         store.save()
 
         return JsonResponse({
@@ -189,6 +196,12 @@ def add_mobile(request):
             'status': 'error',
             'description': 'incomplete parameters',
         }, status=400)
+    
+    except:
+        return JsonResponse({
+            'status': 'error',
+            'description': 'unexpected error',
+        }, status=500)
 
 @require_POST
 @csrf_exempt
@@ -225,6 +238,15 @@ def edit_mobile(request):
         store.contact_number = contact_number
         store.website = website
         store.social_media = social_media
+
+        categories_string = data['categories']
+        if categories_string != '':
+            category_pk_list = list(map(int, categories_string.split(',')))
+            categories = Category.objects.filter(pk__in=category_pk_list)
+            store.categories.clear()
+            store.categories.add(*categories)
+        else: 
+            store.categories.clear()
 
         store.save()
 
@@ -271,5 +293,31 @@ def delete_mobile(request):
         'status': 'success',
         'description': f'successfully deleted store {store.brand}',
     }, status=200)
+
+@require_GET
+def get_categories_mapping(request):
+    
+    categories = Category.objects.all().values('name', 'pk')
+
+    #name is guaranteed to be unique, so eligible for being the key
+    data = {category['name']: category['pk'] for category in categories}
+
+    inverted_data = {category['pk']: category['name'] for category in categories}
+
+    return JsonResponse({
+        'status': 'success',
+        'description': 'successfully retrieved categories mapping',
+        'data': data,
+        'inverted_data': inverted_data,
+        })
+
+
+
+        
+
+    
+
+    
+
 
 
