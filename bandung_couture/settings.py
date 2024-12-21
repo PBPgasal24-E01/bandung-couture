@@ -39,6 +39,27 @@ else:
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "raihan-akbar-bandungcouture.pbp.cs.ui.ac.id", "10.0.2.2"]
 
+# Additional CORS settings that might help
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 # Application definition
 
