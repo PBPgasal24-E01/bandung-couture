@@ -144,7 +144,15 @@ def deliver_store_form(request, pk=None):
 
 @require_GET
 def show_rest_all(request):
-    stores = Store.objects.all()
+
+    category_filter = request.GET.get('categories-filter', None)
+
+    if not category_filter:
+        stores = Store.objects.all()
+    else:
+        categories_pk = list(map(int, category_filter.split(',')))
+        stores = Store.objects.filter(categories__pk__in=categories_pk).distinct()
+
     return HttpResponse(serializers.serialize('json', stores), content_type='application/json')
 
 @require_GET
