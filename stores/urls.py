@@ -21,4 +21,5 @@ urlpatterns=[
     path('edit-mobile', edit_mobile, name='edit-mobile'),
     path('delete-mobile', delete_mobile, name='delete-mobile'),
     path('get-categories-mapping', get_categories_mapping, name='get-categories-mapping'),
+    path('get-store/<int:store_id>/', get_store_by_id, name='get-store'),
 ]

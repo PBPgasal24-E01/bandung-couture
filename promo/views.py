@@ -126,3 +126,110 @@ def show_json(request):
     } for promo in promos]
 
     return JsonResponse({'promos': promo_list})
+
+def show_json_user(request):
+    if request.user.is_authenticated and request.user.role == 2:
+        promos = Promo.objects.filter(created_by=request.user)
+    else:
+        promos = Promo.objects.none()
+    
+    promo_list = [{
+        'id': promo.id,
+        'title': promo.title,
+        'description': promo.description,
+        'discount_percentage': promo.discount_percentage,
+        'promo_code': promo.promo_code,
+        'start_date': promo.start_date.strftime('%Y-%m-%d'),
+        'end_date': promo.end_date.strftime('%Y-%m-%d'),
+        'created_by': promo.created_by.username if promo.created_by else None
+    } for promo in promos]
+    
+    return JsonResponse({'promos': promo_list})
+
+import json 
+
+
+
+@csrf_exempt
+def edit_promo_flutter(request, id):
+    if request.method == 'POST' and request.POST.get('_method') == 'PUT':
+        promo = get_object_or_404(Promo, pk=id)
+        data = request.POST  # Extract form data
+        
+        # Update fields if they exist in the request
+        if "title" in data:
+            promo.title = data.get("title")
+        if "description" in data:
+            promo.description = data.get("description")
+        if "discount_percentage" in data:
+            try:
+                discount_percentage = float(data.get("discount_percentage"))
+                if not (0 <= discount_percentage <= 100):
+                    return JsonResponse({"status": "error", "message": "Discount percentage must be between 0 and 100."}, status=400)
+                promo.discount_percentage = discount_percentage
+            except ValueError:
+                return JsonResponse({"status": "error", "message": "Invalid discount percentage."}, status=400)
+        if "promo_code" in data:
+            promo.promo_code = data.get("promo_code")
+        if "start_date" in data:
+            promo.start_date = data.get("start_date")
+        if "end_date" in data:
+            promo.end_date = data.get("end_date")
+        
+        promo.save()
+        
+        return JsonResponse({
+            "status": "success",
+            "message": "Promo updated successfully."
+        }, status=200)
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)
+
+@csrf_exempt
+def create_promo_flutter(request):
+    if request.method == 'POST':
+        data = request.POST  # Extract form data
+        
+        # Validate required fields
+        required_fields = ["title", "description", "discount_percentage", "promo_code", "start_date", "end_date"]
+        for field in required_fields:
+            if field not in data:
+                return JsonResponse({"status": "error", "message": f"Missing field: {field}"}, status=400)
+        
+        try:
+            discount_percentage = float(data.get("discount_percentage"))
+            if not (0 <= discount_percentage <= 100):
+                return JsonResponse({"status": "error", "message": "Discount percentage must be between 0 and 100."}, status=400)
+        except ValueError:
+            return JsonResponse({"status": "error", "message": "Invalid discount percentage."}, status=400)
+        
+        # Create the Promo instance
+        new_promo = Promo.objects.create(
+            created_by=request.user,
+            title=data.get("title"),
+            description=data.get("description"),
+            discount_percentage=discount_percentage,
+            promo_code=data.get("promo_code"),
+            start_date=data.get("start_date"),
+            end_date=data.get("end_date")
+        )
+        
+        return JsonResponse({
+            "status": "success",
+            "message": "Promo created successfully.",
+            "promo_id": new_promo.id
+        }, status=201)
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)
+
+@csrf_exempt
+def delete_promo_flutter(request, id):
+    if request.method == 'GET':
+        promo = get_object_or_404(Promo, pk=id)
+        promo.delete()
+        return JsonResponse({
+            "status": "success",
+            "message": "Promo deleted successfully."
+        }, status=200)
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)

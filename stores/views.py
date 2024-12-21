@@ -311,13 +311,8 @@ def get_categories_mapping(request):
         'inverted_data': inverted_data,
         })
 
-
-
-        
-
-    
-
-    
-
+def get_store_by_id(request, store_id):
+    store = Store.objects.get(id=store_id)
+    return HttpResponse(serializers.serialize('json', [store]), content_type='application/json')
 
 
