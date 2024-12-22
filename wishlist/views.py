@@ -15,6 +15,13 @@ def wishlist_view(request):
 @require_GET
 def wishlist_view_mobile(request):
     wishlist_items = Wishlist.objects.filter(user=request.user)
+    category_filter = request.GET.get('categories-filter', None)
+
+    if category_filter :
+        categories_pk = list(map(int, category_filter.split(',')))
+        stores = Store.objects.filter(categories__pk__in=categories_pk).distinct()
+        wishlist_items = wishlist_items.filter(store__in=stores)
+        
     return HttpResponse(serializers.serialize('json', wishlist_items), content_type='application/json')
 
 def fetch_reccomended (request) :
