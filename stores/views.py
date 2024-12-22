@@ -147,8 +147,10 @@ def show_rest_all(request):
 
     category_filter = request.GET.get('categories-filter', None)
 
-    if not category_filter:
+    if category_filter == None:
         stores = Store.objects.all()
+    elif category_filter == "":
+        stores = Store.objects.none()
     else:
         categories_pk = list(map(int, category_filter.split(',')))
         stores = Store.objects.filter(categories__pk__in=categories_pk).distinct()
@@ -187,7 +189,10 @@ def add_mobile(request):
                              contact_number=contact_number, website=website, social_media=social_media)
 
         categories_string = data['categories']
-        if categories_string != '':
+
+        if categories_string == "-1":
+            store.categories.add(*list(Category.objects.all()))
+        elif categories_string != '':
             category_pk_list = list(map(int, categories_string.split(',')))
             categories = Category.objects.filter(pk__in=category_pk_list)
             store.categories.add(*categories)
@@ -248,13 +253,18 @@ def edit_mobile(request):
         store.social_media = social_media
 
         categories_string = data['categories']
-        if categories_string != '':
+
+        if categories_string == "-1":
+            store.categories.clear()
+            store.categories.add(*list(Category.objects.all()))
+        elif categories_string != '':
             category_pk_list = list(map(int, categories_string.split(',')))
             categories = Category.objects.filter(pk__in=category_pk_list)
             store.categories.clear()
             store.categories.add(*categories)
         else: 
             store.categories.clear()
+
 
         store.save()
 
