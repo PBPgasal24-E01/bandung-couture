@@ -112,7 +112,7 @@ def delete_promo(request, id):
 
 
 def show_json(request):
-    promos = Promo.objects.all()  # Ambil semua data dari model Promo
+    promos = Promo.objects.all() 
 
     promo_list = [{
         'id': promo.id,
@@ -146,17 +146,11 @@ def show_json_user(request):
     
     return JsonResponse({'promos': promo_list})
 
-import json 
-
-
-
 @csrf_exempt
 def edit_promo_flutter(request, id):
     if request.method == 'POST' and request.POST.get('_method') == 'PUT':
         promo = get_object_or_404(Promo, pk=id)
-        data = request.POST  # Extract form data
-        
-        # Update fields if they exist in the request
+        data = request.POST  
         if "title" in data:
             promo.title = data.get("title")
         if "description" in data:
@@ -188,9 +182,7 @@ def edit_promo_flutter(request, id):
 @csrf_exempt
 def create_promo_flutter(request):
     if request.method == 'POST':
-        data = request.POST  # Extract form data
-        
-        # Validate required fields
+        data = request.POST  
         required_fields = ["title", "description", "discount_percentage", "promo_code", "start_date", "end_date"]
         for field in required_fields:
             if field not in data:
@@ -203,7 +195,6 @@ def create_promo_flutter(request):
         except ValueError:
             return JsonResponse({"status": "error", "message": "Invalid discount percentage."}, status=400)
         
-        # Create the Promo instance
         new_promo = Promo.objects.create(
             created_by=request.user,
             title=data.get("title"),
