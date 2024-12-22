@@ -43,7 +43,7 @@ def register(request):
             username = data['username']
             password1 = data['password1']
             password2 = data['password2']
-            role = data.get('role')  # Ambil role user
+            role = data['role']
 
             if password1 != password2:
                 return JsonResponse({
