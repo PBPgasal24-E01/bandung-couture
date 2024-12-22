@@ -193,7 +193,11 @@ def add_flutter(request):
     if request.method == 'POST':
 
         data = json.loads(request.body)
-        parent = Forum.objects.get(pk=data["parent"])
+        
+        if data["parent"] == None :
+            parent = None
+        else :
+            parent = Forum.objects.get(pk=data["parent"])
         new_data = Forum.objects.create(
             user=request.user,
             title=data["title"],
