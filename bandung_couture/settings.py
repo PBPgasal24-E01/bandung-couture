@@ -99,6 +99,30 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
 
+
+CORS_ALLOWED_ORIGINS = ["http://localhost","http://127.0.0.1","http://raihan-akbar-bandungcouture.pbp.cs.ui.ac.id", "https://raihan-akbar-bandungcouture.pbp.cs.ui.ac.id"]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
