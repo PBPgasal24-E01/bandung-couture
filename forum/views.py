@@ -193,7 +193,6 @@ def add_flutter(request):
     if request.method == 'POST':
 
         data = json.loads(request.body)
-        print(data)
         if data["parent"] == None :
             parent = None
         else :
